@@ -66,7 +66,24 @@ extern unsigned char ffi_arm_trampoline[12] FFI_HIDDEN;
 
 #if defined(__QNX__)
 #include <sys/mman.h>
+
+#if defined (__clang__) && defined (__APPLE__)
+extern void sys_icache_invalidate (void *start, size_t len);
 #endif
+
+static inline void
+ffi_clear_cache (void *start, void *end)
+{
+#if defined (__clang__) && defined (__APPLE__)
+  sys_icache_invalidate (start, (char *)end - (char *)start);
+#elif defined (__GNUC__)
+  __builtin___clear_cache (start, end);
+#else
+#error "Missing builtin to flush instruction cache"
+#endif
+}
+
+#endif /* __MACH__ */
 
 /* Forward declares. */
 static int vfp_type_p (const ffi_type *);
