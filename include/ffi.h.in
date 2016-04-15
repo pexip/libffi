@@ -83,6 +83,23 @@ extern "C" {
 
 #include <ffitarget.h>
 
+/* Need minimal decorations for DLLs to works on Windows.  GCC has
+   autoimport and autoexport.  Rely on Libtool to help MSVC export
+   from a DLL, but always declare data to be imported for MSVC
+   clients.  This costs an extra indirection for MSVC clients using
+   the static version of the library, but don't worry about that.
+   Besides, as a workaround, they can define FFI_BUILDING if they
+   *know* they are going to link with the static library.  */
+#if defined _WIN32 && !defined FFI_STATIC_BUILD
+#ifdef FFI_BUILDING
+#define FFI_EXTERN __declspec(dllexport)
+#else
+#define FFI_EXTERN __declspec(dllimport)
+#endif
+#else
+#define FFI_EXTERN extern
+#endif
+
 #ifndef LIBFFI_ASM
 
 #if defined(_MSC_VER) && !defined(__clang__)
@@ -284,34 +301,33 @@ typedef union {
 typedef ffi_raw ffi_java_raw;
 #endif
 
-
-FFI_API
+FFI_EXTERN
 void ffi_raw_call (ffi_cif *cif,
 		   void (*fn)(void),
 		   void *rvalue,
 		   ffi_raw *avalue);
 
-FFI_API void ffi_ptrarray_to_raw (ffi_cif *cif, void **args, ffi_raw *raw);
-FFI_API void ffi_raw_to_ptrarray (ffi_cif *cif, ffi_raw *raw, void **args);
-FFI_API size_t ffi_raw_size (ffi_cif *cif);
+FFI_EXTERN void ffi_ptrarray_to_raw (ffi_cif *cif, void **args, ffi_raw *raw);
+FFI_EXTERN void ffi_raw_to_ptrarray (ffi_cif *cif, ffi_raw *raw, void **args);
+FFI_EXTERN size_t ffi_raw_size (ffi_cif *cif);
 
 /* This is analogous to the raw API, except it uses Java parameter
    packing, even on 64-bit machines.  I.e. on 64-bit machines longs
    and doubles are followed by an empty 64-bit word.  */
 
 #if !FFI_NATIVE_RAW_API
-FFI_API
+FFI_EXTERN
 void ffi_java_raw_call (ffi_cif *cif,
 			void (*fn)(void),
 			void *rvalue,
 			ffi_java_raw *avalue) __attribute__((deprecated));
 #endif
 
-FFI_API
+FFI_EXTERN
 void ffi_java_ptrarray_to_raw (ffi_cif *cif, void **args, ffi_java_raw *raw) __attribute__((deprecated));
-FFI_API
+FFI_EXTERN
 void ffi_java_raw_to_ptrarray (ffi_cif *cif, ffi_java_raw *raw, void **args) __attribute__((deprecated));
-FFI_API
+FFI_EXTERN
 size_t ffi_java_raw_size (ffi_cif *cif) __attribute__((deprecated));
 
 /* ---- Definitions for closures ----------------------------------------- */
@@ -349,10 +365,10 @@ typedef struct {
 # endif
 #endif
 
-FFI_API void *ffi_closure_alloc (size_t size, void **code);
-FFI_API void ffi_closure_free (void *);
+FFI_EXTERN void *ffi_closure_alloc (size_t size, void **code);
+FFI_EXTERN void ffi_closure_free (void *);
 
-FFI_API ffi_status
+FFI_EXTERN ffi_status
 ffi_prep_closure (ffi_closure*,
 		  ffi_cif *,
 		  void (*fun)(ffi_cif*,void*,void**,void*),
@@ -364,7 +380,7 @@ ffi_prep_closure (ffi_closure*,
 #endif
   ;
 
-FFI_API ffi_status
+FFI_EXTERN ffi_status
 ffi_prep_closure_loc (ffi_closure*,
 		      ffi_cif *,
 		      void (*fun)(ffi_cif*,void*,void**,void*),
@@ -425,13 +441,13 @@ typedef struct {
 
 } ffi_java_raw_closure;
 
-FFI_API ffi_status
+FFI_EXTERN ffi_status
 ffi_prep_raw_closure (ffi_raw_closure*,
 		      ffi_cif *cif,
 		      void (*fun)(ffi_cif*,void*,ffi_raw*,void*),
 		      void *user_data);
 
-FFI_API ffi_status
+FFI_EXTERN ffi_status
 ffi_prep_raw_closure_loc (ffi_raw_closure*,
 			  ffi_cif *cif,
 			  void (*fun)(ffi_cif*,void*,ffi_raw*,void*),
@@ -439,13 +455,13 @@ ffi_prep_raw_closure_loc (ffi_raw_closure*,
 			  void *codeloc);
 
 #if !FFI_NATIVE_RAW_API
-FFI_API ffi_status
+FFI_EXTERN ffi_status
 ffi_prep_java_raw_closure (ffi_java_raw_closure*,
 		           ffi_cif *cif,
 		           void (*fun)(ffi_cif*,void*,ffi_java_raw*,void*),
 		           void *user_data) __attribute__((deprecated));
 
-FFI_API ffi_status
+FFI_EXTERN ffi_status
 ffi_prep_java_raw_closure_loc (ffi_java_raw_closure*,
 			       ffi_cif *cif,
 			       void (*fun)(ffi_cif*,void*,ffi_java_raw*,void*),
@@ -463,24 +479,26 @@ typedef struct {
   void     (*fun)(ffi_cif*,void*,void**,void*);
 } ffi_go_closure;
 
-FFI_API ffi_status ffi_prep_go_closure (ffi_go_closure*, ffi_cif *,
+FFI_EXTERN
+ffi_status ffi_prep_go_closure (ffi_go_closure*, ffi_cif *,
 				void (*fun)(ffi_cif*,void*,void**,void*));
 
-FFI_API void ffi_call_go (ffi_cif *cif, void (*fn)(void), void *rvalue,
+FFI_EXTERN
+void ffi_call_go (ffi_cif *cif, void (*fn)(void), void *rvalue,
 		  void **avalue, void *closure);
 
 #endif /* FFI_GO_CLOSURES */
 
 /* ---- Public interface definition -------------------------------------- */
 
-FFI_API
+FFI_EXTERN
 ffi_status ffi_prep_cif(ffi_cif *cif,
 			ffi_abi abi,
 			unsigned int nargs,
 			ffi_type *rtype,
 			ffi_type **atypes);
 
-FFI_API
+FFI_EXTERN
 ffi_status ffi_prep_cif_var(ffi_cif *cif,
 			    ffi_abi abi,
 			    unsigned int nfixedargs,
@@ -488,13 +506,13 @@ ffi_status ffi_prep_cif_var(ffi_cif *cif,
 			    ffi_type *rtype,
 			    ffi_type **atypes);
 
-FFI_API
+FFI_EXTERN
 void ffi_call(ffi_cif *cif,
 	      void (*fn)(void),
 	      void *rvalue,
 	      void **avalue);
 
-FFI_API
+FFI_EXTERN
 ffi_status ffi_get_struct_offsets (ffi_abi abi, ffi_type *struct_type,
 				   size_t *offsets);
 
@@ -509,7 +527,7 @@ ffi_status ffi_get_struct_offsets (ffi_abi abi, ffi_type *struct_type,
 
 /* ---- Definitions shared with assembly code ---------------------------- */
 
-#endif
+#endif /* !LIBFFI_ASM */
 
 #ifdef __cplusplus
 }
