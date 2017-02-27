@@ -87,3 +87,6 @@ ffi_lib = library('ffi', ffi_c_sources, ffi_asm_sources,
   # current - age
   soversion : '7',
   install : true)
+
+ffi_dep = declare_dependency(link_with : ffi_lib,
+  include_directories : ffiinc)
