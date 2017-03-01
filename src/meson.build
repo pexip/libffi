@@ -61,15 +61,18 @@ if cc.get_id() == 'msvc'
   ml = find_program('ml', 'ml64')
   ffi_asm_objs = []
   foreach asm_source : ffi_asm_sources
+    incflags = ['/I' + join_paths(meson.current_source_dir(), '..'),
+                '/I' + join_paths(meson.current_build_dir(), '..'),
+                '/I' + join_paths(meson.current_source_dir(), '..', 'include'),
+                '/I' + join_paths(meson.current_build_dir(), '..', 'include')]
     preproc_name = asm_source.underscorify() + '.i'
     obj_name = asm_source.underscorify() + '.obj'
     preproc = custom_target(preproc_name,
         input : asm_source,
         output : preproc_name,
         command : [cl, '/nologo', '/EP', '/P', '/Fi@OUTPUT@',
-                   '/I.', '/I..', '/Iinclude', '/I..\\include',
                    '/DTARGET=' + TARGET, '/DFFI_BUILDING',
-                   '@INPUT@'])
+                   '@INPUT@'] + incflags)
     ffi_asm_objs += custom_target(obj_name,
         input : preproc,
         output : obj_name,
