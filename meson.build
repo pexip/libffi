@@ -191,12 +191,13 @@ msvcc = find_program('msvcc.sh')
 
 # pkg-config file
 ffi_pc_conf = configuration_data()
-ffi_pc_conf.set('prefix', get_option('prefix'))
-ffi_pc_conf.set('exec_prefix', get_option('prefix'))
-ffi_pc_conf.set('libdir', '@0@/@1@'.format(get_option('prefix'), get_option('libdir')))
-ffi_pc_conf.set('includedir', '@0@/include'.format(get_option('prefix')))
+ffi_pc_conf.set('prefix', join_paths (get_option('prefix')))
+ffi_pc_conf.set('exec_prefix', '${prefix}')
+ffi_pc_conf.set('libdir', '${prefix}/@0@'.format(get_option('libdir')))
+ffi_pc_conf.set('toolexeclibdir', '${libdir}')
+ffi_pc_conf.set('includedir', '${prefix}/@0@'.format(get_option('includedir')))
 ffi_pc_conf.set('PACKAGE_VERSION', meson.project_version())
-pkgconfigdir = get_option('libdir') + '/pkgconfig'
+pkgconfigdir = join_paths(get_option('prefix'), get_option('libdir'), 'pkgconfig')
 configure_file(input : 'libffi.pc.in', output : 'libffi.pc',
   configuration : ffi_pc_conf,
   install_dir : pkgconfigdir)
