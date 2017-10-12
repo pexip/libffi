@@ -34,7 +34,7 @@ if host_system == 'windows'
       ffi_asm_sources += ['x86/win64.S']
     endif
   endif
-elif host_system == 'linux' and host_cpu_family.startswith('x86')
+elif host_cpu_family.startswith('x86')
   if size_t == 4
     # FIXME: gnux32 support?
     TARGET = 'X86'
