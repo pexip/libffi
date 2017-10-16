@@ -165,8 +165,8 @@ ffi_conf.set('HAVE_STDINT_H', cc.has_header('stdint.h'))
 
 # Misc defines
 # FIXME: Check if this is compiler-specific check is correct
-if host_system != 'windows'
-  message('Host system is not Windows; assuming .hidden pseudo-op is available')
+if host_system == 'linux'
+  message('Host system is Linux; assuming .hidden pseudo-op is available')
   ffi_conf.set('HAVE_HIDDEN_VISIBILITY_ATTRIBUTE', 1)
 endif
 
