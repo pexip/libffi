@@ -12,7 +12,6 @@ if get_option('ffi-debug')
   ffi_c_sources += ['debug.c']
 endif
 
-# We only support x86 on Windows and Linux right now
 if host_system == 'windows'
   # No ARM support for Windows in libffi
   arch_subdir = 'x86'
@@ -34,7 +33,7 @@ if host_system == 'windows'
       ffi_asm_sources += ['x86/win64.S']
     endif
   endif
-elif host_system == 'linux' and host_cpu_family.startswith('x86')
+elif host_cpu_family.startswith('x86')
   arch_subdir = 'x86'
   if size_t == 4
     # FIXME: gnux32 support?
