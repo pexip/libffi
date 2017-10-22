@@ -46,7 +46,7 @@ struct win64_call_frame
 };
 
 extern void ffi_call_win64 (void *stack, struct win64_call_frame *,
-			    void *closure) FFI_HIDDEN;
+			    void *closure, size_t args_nbytes) FFI_HIDDEN;
 
 ffi_status
 EFI64(ffi_prep_cif_machdep)(ffi_cif *cif)
@@ -160,7 +160,7 @@ ffi_call_int (ffi_cif *cif, void (*fn)(void), void *rvalue,
 	}
     }
 
-  ffi_call_win64 (stack, frame, closure);
+  ffi_call_win64 (stack, frame, closure, cif->bytes);
 }
 
 void

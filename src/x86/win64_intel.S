@@ -48,18 +48,37 @@
 C(ffi_call_win64) proc SEH(frame)
 	cfi_startproc
 	/* Set up the local stack frame and install it in rbp/rsp.  */
-	mov	RAX, [RSP]
-	mov	[arg1], RBP
-	mov	[arg1 + 8], RAX
-	mov	[arg1 + 16], RSP
-	mov	RBP, arg1
-	cfi_def_cfa(rbp, 16)
-	cfi_rel_offset(rbp, 0)
-	SEH(.pushreg rbp)
-	SEH(.setframe rbp, 0)
-	SEH(.endprolog)
-	mov	RSP, arg0
+	;mov	RAX, [RSP]
+	;mov	[arg1], RBP
+	;mov	[arg1 + 8], RAX
+	;mov	[arg1 + 16], RSP
+	;mov	RBP, RSP
+	;cfi_def_cfa(rbp, 16)
+	;cfi_rel_offset(rbp, 0)
+	;SEH(.pushreg rbp)
+	;SEH(.setframe rbp, 0)
 
+	push rbp
+	.pushreg rbp
+	sub RSP, 010h
+	SEH(.allocstack 16)
+	mov RBP, RSP
+	SEH(.setframe rbp, 0)
+	mov [RSP + 08h], RDI
+	SEH(.savereg rdi, 8)
+	mov [RSP], RSI
+	SEH(.savereg rsi, 0)
+	SEH(.endprolog)
+
+	sub rsp, arg3
+	and rsp, 0fffffffffffffff0h
+
+	mov RDI, RSP
+	mov RSI, arg0
+	mov RCX, arg3
+	rep movsb
+
+	mov RSI, arg1
 	mov	R10, arg2
 
 	/* Load all slots into both general and xmm registers.  */
@@ -72,29 +91,28 @@ C(ffi_call_win64) proc SEH(frame)
 	mov	R9, [RSP + 24]
 	movsd	XMM3, qword ptr [RSP + 24]
 
-	call	qword ptr [RBP + 24]
+	call	qword ptr [RSI + 24]
 
-	mov	ECX, [RBP + 32]	/* flags */
-	mov	R8, [RBP + 40]	/* rvalue */
+	mov	ECX, [RSI + 32]	/* flags */
+	mov	R8, [RSI + 40]	/* rvalue */
 	lea	R10, ffi_call_win64_tab
 	cmp	ECX, FFI_TYPE_SMALL_STRUCT_4B
 	lea	R10, [R10 + RCX*8]
 
-	/* Restore RSP, the stacked return address, and RBP to how they were on entry */
-	mov	RSP, [RBP + 16]
-	mov	R9, [RBP + 8]
-	mov	[RSP], R9
-	mov	RBP, [RBP]
+	mov RSI, [RBP]
+	mov RDI, [RBP + 08h]
+	lea RSP, [RBP + 010h]
+	pop RBP
 
 	ja	L99
 	jmp	R10
 
 epilogue macro
-	cfi_remember_state
-	cfi_def_cfa(rsp, 8)
-	cfi_restore(rbp)
+	;cfi_remember_state
+	;cfi_def_cfa(rsp, 8)
+	;cfi_restore(rbp)
 	RET
-	cfi_restore_state
+	;cfi_restore_state
 endm
 
 	ALIGN 8
