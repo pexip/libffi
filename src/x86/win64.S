@@ -50,6 +50,7 @@ C(ffi_call_win64):
 	movq	(%rsp), %rax
 	movq	%rbp, (arg1)
 	movq	%rax, 8(arg1)
+	movq	%rsp, 16(arg1)
 	movq	arg1, %rbp
 	cfi_def_cfa(%rbp, 16)
 	cfi_rel_offset(%rbp, 0)
@@ -70,20 +71,24 @@ C(ffi_call_win64):
 	movq	24(%rsp), %r9
 	movsd	24(%rsp), %xmm3
 
-	call	*16(%rbp)
+	call	*24(%rbp)
 
-	movl	24(%rbp), %ecx
-	movq	32(%rbp), %r8
+	movl	32(%rbp), %ecx	/* flags */
+	movq	40(%rbp), %r8	/* rvalue */
 	leaq	0f(%rip), %r10
 	cmpl	$FFI_TYPE_SMALL_STRUCT_4B, %ecx
 	leaq	(%r10, %rcx, 8), %r10
+
+	/* Restore RSP, the stacked return address, and RBP to how they were on entry */
+	mov	16(%rbp), %rsp
+	mov	8(%rbp), %r9
+	mov	%rp, (%rsp)
+	mov	(%rbp), %rbp
+
 	ja	99f
 	jmp	*%r10
 
-/* Below, we're space constrained most of the time.  Thus we eschew the
-   modern "mov, pop, ret" sequence (5 bytes) for "leave, ret" (2 bytes).  */
 .macro epilogue
-	leaveq
 	cfi_remember_state
 	cfi_def_cfa(%rsp, 8)
 	cfi_restore(%rbp)

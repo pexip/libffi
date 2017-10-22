@@ -51,6 +51,7 @@ C(ffi_call_win64) proc SEH(frame)
 	mov	RAX, [RSP]
 	mov	[arg1], RBP
 	mov	[arg1 + 8], RAX
+	mov	[arg1 + 16], RSP
 	mov	RBP, arg1
 	cfi_def_cfa(rbp, 16)
 	cfi_rel_offset(rbp, 0)
@@ -71,20 +72,24 @@ C(ffi_call_win64) proc SEH(frame)
 	mov	R9, [RSP + 24]
 	movsd	XMM3, qword ptr [RSP + 24]
 
-	call	qword ptr [RBP + 16]
+	call	qword ptr [RBP + 24]
 
-	mov	ECX, [RBP + 24]
-	mov	R8, [RBP + 32]
+	mov	ECX, [RBP + 32]	/* flags */
+	mov	R8, [RBP + 40]	/* rvalue */
 	lea	R10, ffi_call_win64_tab
 	cmp	ECX, FFI_TYPE_SMALL_STRUCT_4B
 	lea	R10, [R10 + RCX*8]
+
+	/* Restore RSP, the stacked return address, and RBP to how they were on entry */
+	mov	RSP, [RBP + 16]
+	mov	R9, [RBP + 8]
+	mov	[RSP], R9
+	mov	RBP, [RBP]
+
 	ja	L99
 	jmp	R10
 
-/* Below, we're space constrained most of the time.  Thus we eschew the
-   modern "mov, pop, ret" sequence (5 bytes) for "leave, ret" (2 bytes).  */
 epilogue macro
-	LEAVE
 	cfi_remember_state
 	cfi_def_cfa(rsp, 8)
 	cfi_restore(rbp)
