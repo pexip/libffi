@@ -47,72 +47,71 @@
 
 C(ffi_call_win64) proc SEH(frame)
 	cfi_startproc
-	/* Set up the local stack frame and install it in rbp/rsp.  */
-	;mov	RAX, [RSP]
-	;mov	[arg1], RBP
-	;mov	[arg1 + 8], RAX
-	;mov	[arg1 + 16], RSP
-	;mov	RBP, RSP
-	;cfi_def_cfa(rbp, 16)
-	;cfi_rel_offset(rbp, 0)
-	;SEH(.pushreg rbp)
-	;SEH(.setframe rbp, 0)
-
-	push rbp
-	.pushreg rbp
-	sub RSP, 010h
-	SEH(.allocstack 16)
+	push RBP
+	cfi_def_cfa_offset(16)
+	cfi_offset(rbp, -16)
+	SEH(.pushreg rbp)
 	mov RBP, RSP
+	cfi_def_cfa_register(rbp)
 	SEH(.setframe rbp, 0)
-	mov [RSP + 08h], RDI
-	SEH(.savereg rdi, 8)
-	mov [RSP], RSI
-	SEH(.savereg rsi, 0)
+	mov [RSP + 18h], RDI
+	cfi_offset(rdi, 8)
+	SEH(.savereg rdi, 18h)
+	mov [RSP + 10h], RSI
+	cfi_offset(rsi, 0)
+	SEH(.savereg rsi, 10h)
 	SEH(.endprolog)
 
-	sub rsp, arg3
-	and rsp, 0fffffffffffffff0h
+	/* Allocate space for stack parameters */
+	sub RSP, arg1
+	and RSP, 0fffffffffffffff0h
 
+	/* Copy stack parameters to local stack */
 	mov RDI, RSP
 	mov RSI, arg0
-	mov RCX, arg3
+	mov RCX, arg1
 	rep movsb
 
-	mov RSI, arg1
-	mov	R10, arg2
+	mov RSI, arg2
+	mov	R10, arg3
 
 	/* Load all slots into both general and xmm registers.  */
 	mov	RCX, [RSP]
 	movsd	XMM0, qword ptr [RSP]
 	mov	RDX, [RSP + 8]
 	movsd	XMM1, qword ptr [RSP + 8]
-	mov	R8, [RSP + 16]
-	movsd	XMM2, qword ptr [RSP + 16]
-	mov	R9, [RSP + 24]
-	movsd	XMM3, qword ptr [RSP + 24]
+	mov	R8, [RSP + 10h]
+	movsd	XMM2, qword ptr [RSP + 10h]
+	mov	R9, [RSP + 18h]
+	movsd	XMM3, qword ptr [RSP + 18h]
 
-	call	qword ptr [RSI + 24]
+	call	qword ptr [RSI]
 
-	mov	ECX, [RSI + 32]	/* flags */
-	mov	R8, [RSI + 40]	/* rvalue */
+	mov	ECX, dword ptr [RSI + 8]	/* flags */
+	mov	R8, qword ptr [RSI + 10h]	/* rvalue */
+
+	/* Restore RSI and RDI */
+	mov RSI, [RBP + 10h]
+	cfi_restore(rsi)
+	mov RDI, [RBP + 18h]
+	cfi_restore(rdi)
+
 	lea	R10, ffi_call_win64_tab
 	cmp	ECX, FFI_TYPE_SMALL_STRUCT_4B
 	lea	R10, [R10 + RCX*8]
 
-	mov RSI, [RBP]
-	mov RDI, [RBP + 08h]
-	lea RSP, [RBP + 010h]
-	pop RBP
-
 	ja	L99
 	jmp	R10
 
+/* Below, we're space constrained most of the time.  Thus we eschew the
+   modern "mov, pop, ret" sequence (5 bytes) for "leave, ret" (2 bytes).  */
 epilogue macro
-	;cfi_remember_state
-	;cfi_def_cfa(rsp, 8)
-	;cfi_restore(rbp)
-	RET
-	;cfi_restore_state
+	leave
+	cfi_remember_state
+	cfi_restore(rbp)
+	cfi_def_cfa(rsp, 8)
+	ret
+	cfi_restore_state
 endm
 
 	ALIGN 8

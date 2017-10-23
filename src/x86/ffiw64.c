@@ -37,16 +37,13 @@
 
 struct win64_call_frame
 {
-  UINT64 rbp;		/* 0 */
-  UINT64 retaddr;	/* 8 */
-  UINT64 rsp;		/* 16 */
-  UINT64 fn;		/* 24 */
-  UINT64 flags;		/* 32 */
-  UINT64 rvalue;	/* 40 */
+  UINT64 fn;		/* 0 */
+  UINT64 flags;		/* 8 */
+  UINT64 rvalue;	/* 16 */
 };
 
-extern void ffi_call_win64 (void *stack, struct win64_call_frame *,
-			    void *closure, size_t args_nbytes) FFI_HIDDEN;
+extern void ffi_call_win64 (void *stack, size_t args_nbytes,
+			    struct win64_call_frame *, void *closure) FFI_HIDDEN;
 
 ffi_status
 EFI64(ffi_prep_cif_machdep)(ffi_cif *cif)
@@ -105,7 +102,7 @@ ffi_call_int (ffi_cif *cif, void (*fn)(void), void *rvalue,
   int i, j, n, flags;
   UINT64 *stack;
   size_t rsize;
-  struct win64_call_frame *frame;
+  struct win64_call_frame frame;
 
   FFI_ASSERT(cif->abi == FFI_WIN64);
 
@@ -122,14 +119,13 @@ ffi_call_int (ffi_cif *cif, void (*fn)(void), void *rvalue,
 	flags = FFI_TYPE_VOID;
     }
 
-  stack = alloca(cif->bytes + sizeof(struct win64_call_frame) + rsize);
-  frame = (struct win64_call_frame *)((char *)stack + cif->bytes);
+  stack = alloca(cif->bytes + rsize);
   if (rsize)
-    rvalue = frame + 1;
+    rvalue = (char *)stack + cif->bytes;
 
-  frame->fn = (uintptr_t)fn;
-  frame->flags = flags;
-  frame->rvalue = (uintptr_t)rvalue;
+  frame.fn = (uintptr_t)fn;
+  frame.flags = flags;
+  frame.rvalue = (uintptr_t)rvalue;
 
   j = 0;
   if (flags == FFI_TYPE_STRUCT)
@@ -160,7 +156,7 @@ ffi_call_int (ffi_cif *cif, void (*fn)(void), void *rvalue,
 	}
     }
 
-  ffi_call_win64 (stack, frame, closure, cif->bytes);
+  ffi_call_win64 (stack, cif->bytes, &frame, closure);
 }
 
 void
