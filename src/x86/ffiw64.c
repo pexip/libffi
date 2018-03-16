@@ -111,7 +111,7 @@ EFI64(ffi_prep_cif_machdep)(ffi_cif *cif)
  * with the /RTCs or /GZ flags.  Disable the 'Stack frame run time
  * error checking' for this function so we don't hit weird exceptions
  * in debug builds */
-#if defined(_MSVC_VER)
+#if defined(_MSC_VER)
 #pragma runtime_checks("s", off)
 #endif
 static void
@@ -178,7 +178,7 @@ ffi_call_int (ffi_cif *cif, void (*fn)(void), void *rvalue,
 
   ffi_call_win64 (stack, frame, closure);
 }
-#if defined(_MSVC_VER)
+#if defined(_MSC_VER)
 #pragma runtime_checks("s", restore)
 #endif
 
