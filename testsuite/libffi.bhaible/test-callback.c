@@ -1275,7 +1275,7 @@ int main (void)
     ffi_cif cif;
     FFI_PREP_CIF_NOARGS(cif,ffi_type_void);
     PREP_CALLBACK(cif,v_v_simulator,(void*)&v_v);
-    ((void (*) (void)) callback_code) ();
+    ((void (ABI_ATTR *) (void)) callback_code) ();
   }
   FREE_CALLBACK();
 #endif
@@ -1293,7 +1293,7 @@ int main (void)
       ffi_cif cif;
       FFI_PREP_CIF_NOARGS(cif,ffi_type_sint);
       PREP_CALLBACK(cif,i_v_simulator,(void*)&i_v);
-      ir = ((int (*) (void)) callback_code) ();
+      ir = ((int (ABI_ATTR *) (void)) callback_code) ();
     }
     FREE_CALLBACK();
     fprintf(out,"->%d\n",ir);
@@ -1311,7 +1311,7 @@ int main (void)
       ffi_cif cif;
       FFI_PREP_CIF(cif,argtypes,ffi_type_sint);
       PREP_CALLBACK(cif,i_i_simulator,(void*)&i_i);
-      ir = ((int (*) (int)) callback_code) (i1);
+      ir = ((int (ABI_ATTR *) (int)) callback_code) (i1);
     }
     FREE_CALLBACK();
     fprintf(out,"->%d\n",ir);
@@ -1329,7 +1329,7 @@ int main (void)
       ffi_cif cif;
       FFI_PREP_CIF(cif,argtypes,ffi_type_sint);
       PREP_CALLBACK(cif,i_i2_simulator,(void*)&i_i2);
-      ir = ((int (*) (int,int)) callback_code) (i1,i2);
+      ir = ((int (ABI_ATTR *) (int,int)) callback_code) (i1,i2);
     }
     FREE_CALLBACK();
     fprintf(out,"->%d\n",ir);
@@ -1347,7 +1347,7 @@ int main (void)
       ffi_cif cif;
       FFI_PREP_CIF(cif,argtypes,ffi_type_sint);
       PREP_CALLBACK(cif,i_i4_simulator,(void*)&i_i4);
-      ir = ((int (*) (int,int,int,int)) callback_code) (i1,i2,i3,i4);
+      ir = ((int (ABI_ATTR *) (int,int,int,int)) callback_code) (i1,i2,i3,i4);
     }
     FREE_CALLBACK();
     fprintf(out,"->%d\n",ir);
@@ -1365,7 +1365,7 @@ int main (void)
       ffi_cif cif;
       FFI_PREP_CIF(cif,argtypes,ffi_type_sint);
       PREP_CALLBACK(cif,i_i8_simulator,(void*)&i_i8);
-      ir = ((int (*) (int,int,int,int,int,int,int,int)) callback_code) (i1,i2,i3,i4,i5,i6,i7,i8);
+      ir = ((int (ABI_ATTR *) (int,int,int,int,int,int,int,int)) callback_code) (i1,i2,i3,i4,i5,i6,i7,i8);
     }
     FREE_CALLBACK();
     fprintf(out,"->%d\n",ir);
@@ -1383,7 +1383,7 @@ int main (void)
       ffi_cif cif;
       FFI_PREP_CIF(cif,argtypes,ffi_type_sint);
       PREP_CALLBACK(cif,i_i16_simulator,(void*)&i_i16);
-      ir = ((int (*) (int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int)) callback_code) (i1,i2,i3,i4,i5,i6,i7,i8,i9,i10,i11,i12,i13,i14,i15,i16);
+      ir = ((int (ABI_ATTR *) (int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int)) callback_code) (i1,i2,i3,i4,i5,i6,i7,i8,i9,i10,i11,i12,i13,i14,i15,i16);
     }
     FREE_CALLBACK();
     fprintf(out,"->%d\n",ir);
@@ -1405,7 +1405,7 @@ int main (void)
       ffi_cif cif;
       FFI_PREP_CIF(cif,argtypes,ffi_type_float);
       PREP_CALLBACK(cif,f_f_simulator,(void*)&f_f);
-      fr = ((float (*) (float)) callback_code) (f1);
+      fr = ((float (ABI_ATTR *) (float)) callback_code) (f1);
     }
     FREE_CALLBACK();
     fprintf(out,"->%g\n",fr);
@@ -1423,7 +1423,7 @@ int main (void)
       ffi_cif cif;
       FFI_PREP_CIF(cif,argtypes,ffi_type_float);
       PREP_CALLBACK(cif,f_f2_simulator,(void*)&f_f2);
-      fr = ((float (*) (float,float)) callback_code) (f1,f2);
+      fr = ((float (ABI_ATTR *) (float,float)) callback_code) (f1,f2);
     }
     FREE_CALLBACK();
     fprintf(out,"->%g\n",fr);
@@ -1441,7 +1441,7 @@ int main (void)
       ffi_cif cif;
       FFI_PREP_CIF(cif,argtypes,ffi_type_float);
       PREP_CALLBACK(cif,f_f4_simulator,(void*)&f_f4);
-      fr = ((float (*) (float,float,float,float)) callback_code) (f1,f2,f3,f4);
+      fr = ((float (ABI_ATTR *) (float,float,float,float)) callback_code) (f1,f2,f3,f4);
     }
     FREE_CALLBACK();
     fprintf(out,"->%g\n",fr);
@@ -1459,7 +1459,7 @@ int main (void)
       ffi_cif cif;
       FFI_PREP_CIF(cif,argtypes,ffi_type_float);
       PREP_CALLBACK(cif,f_f8_simulator,(void*)&f_f8);
-      fr = ((float (*) (float,float,float,float,float,float,float,float)) callback_code) (f1,f2,f3,f4,f5,f6,f7,f8);
+      fr = ((float (ABI_ATTR *) (float,float,float,float,float,float,float,float)) callback_code) (f1,f2,f3,f4,f5,f6,f7,f8);
     }
     FREE_CALLBACK();
     fprintf(out,"->%g\n",fr);
@@ -1477,7 +1477,7 @@ int main (void)
       ffi_cif cif;
       FFI_PREP_CIF(cif,argtypes,ffi_type_float);
       PREP_CALLBACK(cif,f_f16_simulator,(void*)&f_f16);
-      fr = ((float (*) (float,float,float,float,float,float,float,float,float,float,float,float,float,float,float,float)) callback_code) (f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11,f12,f13,f14,f15,f16);
+      fr = ((float (ABI_ATTR *) (float,float,float,float,float,float,float,float,float,float,float,float,float,float,float,float)) callback_code) (f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11,f12,f13,f14,f15,f16);
     }
     FREE_CALLBACK();
     fprintf(out,"->%g\n",fr);
@@ -1495,7 +1495,7 @@ int main (void)
       ffi_cif cif;
       FFI_PREP_CIF(cif,argtypes,ffi_type_float);
       PREP_CALLBACK(cif,f_f24_simulator,(void*)&f_f24);
-      fr = ((float (*) (float,float,float,float,float,float,float,float,float,float,float,float,float,float,float,float,float,float,float,float,float,float,float,float)) callback_code) (f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11,f12,f13,f14,f15,f16,f17,f18,f19,f20,f21,f22,f23,f24);
+      fr = ((float (ABI_ATTR *) (float,float,float,float,float,float,float,float,float,float,float,float,float,float,float,float,float,float,float,float,float,float,float,float)) callback_code) (f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11,f12,f13,f14,f15,f16,f17,f18,f19,f20,f21,f22,f23,f24);
     }
     FREE_CALLBACK();
     fprintf(out,"->%g\n",fr);
@@ -1518,7 +1518,7 @@ int main (void)
       ffi_cif cif;
       FFI_PREP_CIF(cif,argtypes,ffi_type_double);
       PREP_CALLBACK(cif,d_d_simulator,(void*)&d_d);
-      dr = ((double (*) (double)) callback_code) (d1);
+      dr = ((double (ABI_ATTR *) (double)) callback_code) (d1);
     }
     FREE_CALLBACK();
     fprintf(out,"->%g\n",dr);
@@ -1536,7 +1536,7 @@ int main (void)
       ffi_cif cif;
       FFI_PREP_CIF(cif,argtypes,ffi_type_double);
       PREP_CALLBACK(cif,d_d2_simulator,(void*)&d_d2);
-      dr = ((double (*) (double,double)) callback_code) (d1,d2);
+      dr = ((double (ABI_ATTR *) (double,double)) callback_code) (d1,d2);
     }
     FREE_CALLBACK();
     fprintf(out,"->%g\n",dr);
@@ -1554,7 +1554,7 @@ int main (void)
       ffi_cif cif;
       FFI_PREP_CIF(cif,argtypes,ffi_type_double);
       PREP_CALLBACK(cif,d_d4_simulator,(void*)&d_d4);
-      dr = ((double (*) (double,double,double,double)) callback_code) (d1,d2,d3,d4);
+      dr = ((double (ABI_ATTR *) (double,double,double,double)) callback_code) (d1,d2,d3,d4);
     }
     FREE_CALLBACK();
     fprintf(out,"->%g\n",dr);
@@ -1572,7 +1572,7 @@ int main (void)
       ffi_cif cif;
       FFI_PREP_CIF(cif,argtypes,ffi_type_double);
       PREP_CALLBACK(cif,d_d8_simulator,(void*)&d_d8);
-      dr = ((double (*) (double,double,double,double,double,double,double,double)) callback_code) (d1,d2,d3,d4,d5,d6,d7,d8);
+      dr = ((double (ABI_ATTR *) (double,double,double,double,double,double,double,double)) callback_code) (d1,d2,d3,d4,d5,d6,d7,d8);
     }
     FREE_CALLBACK();
     fprintf(out,"->%g\n",dr);
@@ -1590,7 +1590,7 @@ int main (void)
       ffi_cif cif;
       FFI_PREP_CIF(cif,argtypes,ffi_type_double);
       PREP_CALLBACK(cif,d_d16_simulator,(void*)&d_d16);
-      dr = ((double (*) (double,double,double,double,double,double,double,double,double,double,double,double,double,double,double,double)) callback_code) (d1,d2,d3,d4,d5,d6,d7,d8,d9,d10,d11,d12,d13,d14,d15,d16);
+      dr = ((double (ABI_ATTR *) (double,double,double,double,double,double,double,double,double,double,double,double,double,double,double,double)) callback_code) (d1,d2,d3,d4,d5,d6,d7,d8,d9,d10,d11,d12,d13,d14,d15,d16);
     }
     FREE_CALLBACK();
     fprintf(out,"->%g\n",dr);
@@ -1612,7 +1612,7 @@ int main (void)
       ffi_cif cif;
       FFI_PREP_CIF(cif,argtypes,ffi_type_pointer);
       PREP_CALLBACK(cif,vp_vpdpcpsp_simulator,(void*)&vp_vpdpcpsp);
-      vpr = ((void* (*) (void*,double*,char*,Int*)) callback_code) (&uc1,&d2,str3,&I4);
+      vpr = ((void* (ABI_ATTR *) (void*,double*,char*,Int*)) callback_code) (&uc1,&d2,str3,&I4);
     }
     FREE_CALLBACK();
     fprintf(out,"->0x%p\n",vpr);
@@ -1638,7 +1638,7 @@ int main (void)
       ffi_cif cif;
       FFI_PREP_CIF(cif,argtypes,ffi_type_uchar);
       PREP_CALLBACK(cif,uc_ucsil_simulator,(void*)&uc_ucsil);
-      ucr = ((uchar (*) (uchar,ushort,uint,ulong)) callback_code) (uc1,us2,ui3,ul4);
+      ucr = ((uchar (ABI_ATTR *) (uchar,ushort,uint,ulong)) callback_code) (uc1,us2,ui3,ul4);
     }
     FREE_CALLBACK();
     fprintf(out,"->%u\n",ucr);
@@ -1656,7 +1656,7 @@ int main (void)
       ffi_cif cif;
       FFI_PREP_CIF(cif,argtypes,ffi_type_double);
       PREP_CALLBACK(cif,d_iidd_simulator,(void*)&d_iidd);
-      dr = ((double (*) (int,int,double,double)) callback_code) (i1,i2,d3,d4);
+      dr = ((double (ABI_ATTR *) (int,int,double,double)) callback_code) (i1,i2,d3,d4);
     }
     FREE_CALLBACK();
     fprintf(out,"->%g\n",dr);
@@ -1674,7 +1674,7 @@ int main (void)
       ffi_cif cif;
       FFI_PREP_CIF(cif,argtypes,ffi_type_double);
       PREP_CALLBACK(cif,d_iiidi_simulator,(void*)&d_iiidi);
-      dr = ((double (*) (int,int,int,double,int)) callback_code) (i1,i2,i3,d4,i5);
+      dr = ((double (ABI_ATTR *) (int,int,int,double,int)) callback_code) (i1,i2,i3,d4,i5);
     }
     FREE_CALLBACK();
     fprintf(out,"->%g\n",dr);
@@ -1692,7 +1692,7 @@ int main (void)
       ffi_cif cif;
       FFI_PREP_CIF(cif,argtypes,ffi_type_double);
       PREP_CALLBACK(cif,d_idid_simulator,(void*)&d_idid);
-      dr = ((double (*) (int,double,int,double)) callback_code) (i1,d2,i3,d4);
+      dr = ((double (ABI_ATTR *) (int,double,int,double)) callback_code) (i1,d2,i3,d4);
     }
     FREE_CALLBACK();
     fprintf(out,"->%g\n",dr);
@@ -1710,7 +1710,7 @@ int main (void)
       ffi_cif cif;
       FFI_PREP_CIF(cif,argtypes,ffi_type_double);
       PREP_CALLBACK(cif,d_fdi_simulator,(void*)&d_fdi);
-      dr = ((double (*) (float,double,int)) callback_code) (f1,d2,i3);
+      dr = ((double (ABI_ATTR *) (float,double,int)) callback_code) (f1,d2,i3);
     }
     FREE_CALLBACK();
     fprintf(out,"->%g\n",dr);
@@ -1728,7 +1728,7 @@ int main (void)
       ffi_cif cif;
       FFI_PREP_CIF(cif,argtypes,ffi_type_ushort);
       PREP_CALLBACK(cif,us_cdcd_simulator,(void*)&us_cdcd);
-      usr = ((ushort (*) (char,double,char,double)) callback_code) (c1,d2,c3,d4);
+      usr = ((ushort (ABI_ATTR *) (char,double,char,double)) callback_code) (c1,d2,c3,d4);
     }
     FREE_CALLBACK();
     fprintf(out,"->%u\n",usr);
@@ -1746,7 +1746,7 @@ int main (void)
       ffi_cif cif;
       FFI_PREP_CIF(cif,argtypes,ffi_type_slonglong);
       PREP_CALLBACK(cif,ll_iiilli_simulator,(void*)&ll_iiilli);
-      llr = ((long long (*) (int,int,int,long long,int)) callback_code) (i1,i2,i3,ll1,i13);
+      llr = ((long long (ABI_ATTR *) (int,int,int,long long,int)) callback_code) (i1,i2,i3,ll1,i13);
     }
     FREE_CALLBACK();
     fprintf(out,"->0x%lx%08lx\n",(long)(llr>>32),(long)(llr&0xffffffff));
@@ -1764,7 +1764,7 @@ int main (void)
       ffi_cif cif;
       FFI_PREP_CIF(cif,argtypes,ffi_type_slonglong);
       PREP_CALLBACK(cif,ll_flli_simulator,(void*)&ll_flli);
-      llr = ((long long (*) (float,long long,int)) callback_code) (f13,ll1,i13);
+      llr = ((long long (ABI_ATTR *) (float,long long,int)) callback_code) (f13,ll1,i13);
     }
     FREE_CALLBACK();
     fprintf(out,"->0x%lx%08lx\n",(long)(llr>>32),(long)(llr&0xffffffff));
@@ -1782,7 +1782,7 @@ int main (void)
       ffi_cif cif;
       FFI_PREP_CIF(cif,argtypes,ffi_type_float);
       PREP_CALLBACK(cif,f_fi_simulator,(void*)&f_fi);
-      fr = ((float (*) (float,int)) callback_code) (f1,i9);
+      fr = ((float (ABI_ATTR *) (float,int)) callback_code) (f1,i9);
     }
     FREE_CALLBACK();
     fprintf(out,"->%g\n",fr);
@@ -1800,7 +1800,7 @@ int main (void)
       ffi_cif cif;
       FFI_PREP_CIF(cif,argtypes,ffi_type_float);
       PREP_CALLBACK(cif,f_f2i_simulator,(void*)&f_f2i);
-      fr = ((float (*) (float,float,int)) callback_code) (f1,f2,i9);
+      fr = ((float (ABI_ATTR *) (float,float,int)) callback_code) (f1,f2,i9);
     }
     FREE_CALLBACK();
     fprintf(out,"->%g\n",fr);
@@ -1818,7 +1818,7 @@ int main (void)
       ffi_cif cif;
       FFI_PREP_CIF(cif,argtypes,ffi_type_float);
       PREP_CALLBACK(cif,f_f3i_simulator,(void*)&f_f3i);
-      fr = ((float (*) (float,float,float,int)) callback_code) (f1,f2,f3,i9);
+      fr = ((float (ABI_ATTR *) (float,float,float,int)) callback_code) (f1,f2,f3,i9);
     }
     FREE_CALLBACK();
     fprintf(out,"->%g\n",fr);
@@ -1836,7 +1836,7 @@ int main (void)
       ffi_cif cif;
       FFI_PREP_CIF(cif,argtypes,ffi_type_float);
       PREP_CALLBACK(cif,f_f4i_simulator,(void*)&f_f4i);
-      fr = ((float (*) (float,float,float,float,int)) callback_code) (f1,f2,f3,f4,i9);
+      fr = ((float (ABI_ATTR *) (float,float,float,float,int)) callback_code) (f1,f2,f3,f4,i9);
     }
     FREE_CALLBACK();
     fprintf(out,"->%g\n",fr);
@@ -1854,7 +1854,7 @@ int main (void)
       ffi_cif cif;
       FFI_PREP_CIF(cif,argtypes,ffi_type_float);
       PREP_CALLBACK(cif,f_f7i_simulator,(void*)&f_f7i);
-      fr = ((float (*) (float,float,float,float,float,float,float,int)) callback_code) (f1,f2,f3,f4,f5,f6,f7,i9);
+      fr = ((float (ABI_ATTR *) (float,float,float,float,float,float,float,int)) callback_code) (f1,f2,f3,f4,f5,f6,f7,i9);
     }
     FREE_CALLBACK();
     fprintf(out,"->%g\n",fr);
@@ -1872,7 +1872,7 @@ int main (void)
       ffi_cif cif;
       FFI_PREP_CIF(cif,argtypes,ffi_type_float);
       PREP_CALLBACK(cif,f_f8i_simulator,(void*)&f_f8i);
-      fr = ((float (*) (float,float,float,float,float,float,float,float,int)) callback_code) (f1,f2,f3,f4,f5,f6,f7,f8,i9);
+      fr = ((float (ABI_ATTR *) (float,float,float,float,float,float,float,float,int)) callback_code) (f1,f2,f3,f4,f5,f6,f7,f8,i9);
     }
     FREE_CALLBACK();
     fprintf(out,"->%g\n",fr);
@@ -1890,7 +1890,7 @@ int main (void)
       ffi_cif cif;
       FFI_PREP_CIF(cif,argtypes,ffi_type_float);
       PREP_CALLBACK(cif,f_f13i_simulator,(void*)&f_f13i);
-      fr = ((float (*) (float,float,float,float,float,float,float,float,float,float,float,float,float,int)) callback_code) (f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11,f12,f13,i9);
+      fr = ((float (ABI_ATTR *) (float,float,float,float,float,float,float,float,float,float,float,float,float,int)) callback_code) (f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11,f12,f13,i9);
     }
     FREE_CALLBACK();
     fprintf(out,"->%g\n",fr);
@@ -1908,7 +1908,7 @@ int main (void)
       ffi_cif cif;
       FFI_PREP_CIF(cif,argtypes,ffi_type_double);
       PREP_CALLBACK(cif,d_di_simulator,(void*)&d_di);
-      dr = ((double (*) (double,int)) callback_code) (d1,i9);
+      dr = ((double (ABI_ATTR *) (double,int)) callback_code) (d1,i9);
     }
     FREE_CALLBACK();
     fprintf(out,"->%g\n",dr);
@@ -1926,7 +1926,7 @@ int main (void)
       ffi_cif cif;
       FFI_PREP_CIF(cif,argtypes,ffi_type_double);
       PREP_CALLBACK(cif,d_d2i_simulator,(void*)&d_d2i);
-      dr = ((double (*) (double,double,int)) callback_code) (d1,d2,i9);
+      dr = ((double (ABI_ATTR *) (double,double,int)) callback_code) (d1,d2,i9);
     }
     FREE_CALLBACK();
     fprintf(out,"->%g\n",dr);
@@ -1944,7 +1944,7 @@ int main (void)
       ffi_cif cif;
       FFI_PREP_CIF(cif,argtypes,ffi_type_double);
       PREP_CALLBACK(cif,d_d3i_simulator,(void*)&d_d3i);
-      dr = ((double (*) (double,double,double,int)) callback_code) (d1,d2,d3,i9);
+      dr = ((double (ABI_ATTR *) (double,double,double,int)) callback_code) (d1,d2,d3,i9);
     }
     FREE_CALLBACK();
     fprintf(out,"->%g\n",dr);
@@ -1962,7 +1962,7 @@ int main (void)
       ffi_cif cif;
       FFI_PREP_CIF(cif,argtypes,ffi_type_double);
       PREP_CALLBACK(cif,d_d4i_simulator,(void*)&d_d4i);
-      dr = ((double (*) (double,double,double,double,int)) callback_code) (d1,d2,d3,d4,i9);
+      dr = ((double (ABI_ATTR *) (double,double,double,double,int)) callback_code) (d1,d2,d3,d4,i9);
     }
     FREE_CALLBACK();
     fprintf(out,"->%g\n",dr);
@@ -1980,7 +1980,7 @@ int main (void)
       ffi_cif cif;
       FFI_PREP_CIF(cif,argtypes,ffi_type_double);
       PREP_CALLBACK(cif,d_d7i_simulator,(void*)&d_d7i);
-      dr = ((double (*) (double,double,double,double,double,double,double,int)) callback_code) (d1,d2,d3,d4,d5,d6,d7,i9);
+      dr = ((double (ABI_ATTR *) (double,double,double,double,double,double,double,int)) callback_code) (d1,d2,d3,d4,d5,d6,d7,i9);
     }
     FREE_CALLBACK();
     fprintf(out,"->%g\n",dr);
@@ -1998,7 +1998,7 @@ int main (void)
       ffi_cif cif;
       FFI_PREP_CIF(cif,argtypes,ffi_type_double);
       PREP_CALLBACK(cif,d_d8i_simulator,(void*)&d_d8i);
-      dr = ((double (*) (double,double,double,double,double,double,double,double,int)) callback_code) (d1,d2,d3,d4,d5,d6,d7,d8,i9);
+      dr = ((double (ABI_ATTR *) (double,double,double,double,double,double,double,double,int)) callback_code) (d1,d2,d3,d4,d5,d6,d7,d8,i9);
     }
     FREE_CALLBACK();
     fprintf(out,"->%g\n",dr);
@@ -2016,7 +2016,7 @@ int main (void)
       ffi_cif cif;
       FFI_PREP_CIF(cif,argtypes,ffi_type_double);
       PREP_CALLBACK(cif,d_d12i_simulator,(void*)&d_d12i);
-      dr = ((double (*) (double,double,double,double,double,double,double,double,double,double,double,double,int)) callback_code) (d1,d2,d3,d4,d5,d6,d7,d8,d9,d10,d11,d12,i9);
+      dr = ((double (ABI_ATTR *) (double,double,double,double,double,double,double,double,double,double,double,double,int)) callback_code) (d1,d2,d3,d4,d5,d6,d7,d8,d9,d10,d11,d12,i9);
     }
     FREE_CALLBACK();
     fprintf(out,"->%g\n",dr);
@@ -2034,7 +2034,7 @@ int main (void)
       ffi_cif cif;
       FFI_PREP_CIF(cif,argtypes,ffi_type_double);
       PREP_CALLBACK(cif,d_d13i_simulator,(void*)&d_d13i);
-      dr = ((double (*) (double,double,double,double,double,double,double,double,double,double,double,double,double,int)) callback_code) (d1,d2,d3,d4,d5,d6,d7,d8,d9,d10,d11,d12,d13,i9);
+      dr = ((double (ABI_ATTR *) (double,double,double,double,double,double,double,double,double,double,double,double,double,int)) callback_code) (d1,d2,d3,d4,d5,d6,d7,d8,d9,d10,d11,d12,d13,i9);
     }
     FREE_CALLBACK();
     fprintf(out,"->%g\n",dr);
@@ -2060,7 +2060,7 @@ int main (void)
       ffi_cif cif;
       FFI_PREP_CIF_NOARGS(cif,ffi_type_Size1);
       PREP_CALLBACK(cif,S1_v_simulator,(void*)&S1_v);
-      r = ((Size1 (*) (void)) callback_code) ();
+      r = ((Size1 (ABI_ATTR *) (void)) callback_code) ();
     }
     FREE_CALLBACK();
     fprintf(out,"->{%c}\n",r.x1);
@@ -2085,7 +2085,7 @@ int main (void)
       ffi_cif cif;
       FFI_PREP_CIF_NOARGS(cif,ffi_type_Size2);
       PREP_CALLBACK(cif,S2_v_simulator,(void*)&S2_v);
-      r = ((Size2 (*) (void)) callback_code) ();
+      r = ((Size2 (ABI_ATTR *) (void)) callback_code) ();
     }
     FREE_CALLBACK();
     fprintf(out,"->{%c%c}\n",r.x1,r.x2);
@@ -2110,7 +2110,7 @@ int main (void)
       ffi_cif cif;
       FFI_PREP_CIF_NOARGS(cif,ffi_type_Size3);
       PREP_CALLBACK(cif,S3_v_simulator,(void*)&S3_v);
-      r = ((Size3 (*) (void)) callback_code) ();
+      r = ((Size3 (ABI_ATTR *) (void)) callback_code) ();
     }
     FREE_CALLBACK();
     fprintf(out,"->{%c%c%c}\n",r.x1,r.x2,r.x3);
@@ -2135,7 +2135,7 @@ int main (void)
       ffi_cif cif;
       FFI_PREP_CIF_NOARGS(cif,ffi_type_Size4);
       PREP_CALLBACK(cif,S4_v_simulator,(void*)&S4_v);
-      r = ((Size4 (*) (void)) callback_code) ();
+      r = ((Size4 (ABI_ATTR *) (void)) callback_code) ();
     }
     FREE_CALLBACK();
     fprintf(out,"->{%c%c%c%c}\n",r.x1,r.x2,r.x3,r.x4);
@@ -2160,7 +2160,7 @@ int main (void)
       ffi_cif cif;
       FFI_PREP_CIF_NOARGS(cif,ffi_type_Size7);
       PREP_CALLBACK(cif,S7_v_simulator,(void*)&S7_v);
-      r = ((Size7 (*) (void)) callback_code) ();
+      r = ((Size7 (ABI_ATTR *) (void)) callback_code) ();
     }
     FREE_CALLBACK();
     fprintf(out,"->{%c%c%c%c%c%c%c}\n",r.x1,r.x2,r.x3,r.x4,r.x5,r.x6,r.x7);
@@ -2185,7 +2185,7 @@ int main (void)
       ffi_cif cif;
       FFI_PREP_CIF_NOARGS(cif,ffi_type_Size8);
       PREP_CALLBACK(cif,S8_v_simulator,(void*)&S8_v);
-      r = ((Size8 (*) (void)) callback_code) ();
+      r = ((Size8 (ABI_ATTR *) (void)) callback_code) ();
     }
     FREE_CALLBACK();
     fprintf(out,"->{%c%c%c%c%c%c%c%c}\n",r.x1,r.x2,r.x3,r.x4,r.x5,r.x6,r.x7,r.x8);
@@ -2210,7 +2210,7 @@ int main (void)
       ffi_cif cif;
       FFI_PREP_CIF_NOARGS(cif,ffi_type_Size12);
       PREP_CALLBACK(cif,S12_v_simulator,(void*)&S12_v);
-      r = ((Size12 (*) (void)) callback_code) ();
+      r = ((Size12 (ABI_ATTR *) (void)) callback_code) ();
     }
     FREE_CALLBACK();
     fprintf(out,"->{%c%c%c%c%c%c%c%c%c%c%c%c}\n",r.x1,r.x2,r.x3,r.x4,r.x5,r.x6,r.x7,r.x8,r.x9,r.x10,r.x11,r.x12);
@@ -2235,7 +2235,7 @@ int main (void)
       ffi_cif cif;
       FFI_PREP_CIF_NOARGS(cif,ffi_type_Size15);
       PREP_CALLBACK(cif,S15_v_simulator,(void*)&S15_v);
-      r = ((Size15 (*) (void)) callback_code) ();
+      r = ((Size15 (ABI_ATTR *) (void)) callback_code) ();
     }
     FREE_CALLBACK();
     fprintf(out,"->{%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c}\n",r.x1,r.x2,r.x3,r.x4,r.x5,r.x6,r.x7,r.x8,r.x9,r.x10,r.x11,r.x12,r.x13,r.x14,r.x15);
@@ -2260,7 +2260,7 @@ int main (void)
       ffi_cif cif;
       FFI_PREP_CIF_NOARGS(cif,ffi_type_Size16);
       PREP_CALLBACK(cif,S16_v_simulator,(void*)&S16_v);
-      r = ((Size16 (*) (void)) callback_code) ();
+      r = ((Size16 (ABI_ATTR *) (void)) callback_code) ();
     }
     FREE_CALLBACK();
     fprintf(out,"->{%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c}\n",r.x1,r.x2,r.x3,r.x4,r.x5,r.x6,r.x7,r.x8,r.x9,r.x10,r.x11,r.x12,r.x13,r.x14,r.x15,r.x16);
@@ -2297,7 +2297,7 @@ int main (void)
       ffi_cif cif;
       FFI_PREP_CIF(cif,argtypes,ffi_type_Int);
       PREP_CALLBACK(cif,I_III_simulator,(void*)&I_III);
-      Ir = ((Int (*) (Int,Int,Int)) callback_code) (I1,I2,I3);
+      Ir = ((Int (ABI_ATTR *) (Int,Int,Int)) callback_code) (I1,I2,I3);
     }
     FREE_CALLBACK();
     fprintf(out,"->{%d}\n",Ir.x);
@@ -2321,7 +2321,7 @@ int main (void)
       ffi_cif cif;
       FFI_PREP_CIF(cif,argtypes,ffi_type_Char);
       PREP_CALLBACK(cif,C_CdC_simulator,(void*)&C_CdC);
-      Cr = ((Char (*) (Char,double,Char)) callback_code) (C1,d2,C3);
+      Cr = ((Char (ABI_ATTR *) (Char,double,Char)) callback_code) (C1,d2,C3);
     }
     FREE_CALLBACK();
     fprintf(out,"->{'%c'}\n",Cr.x);
@@ -2345,7 +2345,7 @@ int main (void)
       ffi_cif cif;
       FFI_PREP_CIF(cif,argtypes,ffi_type_Float);
       PREP_CALLBACK(cif,F_Ffd_simulator,(void*)&F_Ffd);
-      Fr = ((Float (*) (Float,float,double)) callback_code) (F1,f2,d3);
+      Fr = ((Float (ABI_ATTR *) (Float,float,double)) callback_code) (F1,f2,d3);
     }
     FREE_CALLBACK();
     fprintf(out,"->{%g}\n",Fr.x);
@@ -2369,7 +2369,7 @@ int main (void)
       ffi_cif cif;
       FFI_PREP_CIF(cif,argtypes,ffi_type_Double);
       PREP_CALLBACK(cif,D_fDd_simulator,(void*)&D_fDd);
-      Dr = ((Double (*) (float,Double,double)) callback_code) (f1,D2,d3);
+      Dr = ((Double (ABI_ATTR *) (float,Double,double)) callback_code) (f1,D2,d3);
     }
     FREE_CALLBACK();
     fprintf(out,"->{%g}\n",Dr.x);
@@ -2393,7 +2393,7 @@ int main (void)
       ffi_cif cif;
       FFI_PREP_CIF(cif,argtypes,ffi_type_Double);
       PREP_CALLBACK(cif,D_Dfd_simulator,(void*)&D_Dfd);
-      Dr = ((Double (*) (Double,float,double)) callback_code) (D1,f2,d3);
+      Dr = ((Double (ABI_ATTR *) (Double,float,double)) callback_code) (D1,f2,d3);
     }
     FREE_CALLBACK();
     fprintf(out,"->{%g}\n",Dr.x);
@@ -2417,7 +2417,7 @@ int main (void)
       ffi_cif cif;
       FFI_PREP_CIF(cif,argtypes,ffi_type_J);
       PREP_CALLBACK(cif,J_JiJ_simulator,(void*)&J_JiJ);
-      Jr = ((J (*) (J,int,J)) callback_code) (J1,i2,J2);
+      Jr = ((J (ABI_ATTR *) (J,int,J)) callback_code) (J1,i2,J2);
     }
     FREE_CALLBACK();
     fprintf(out,"->{%ld,%ld}\n",Jr.l1,Jr.l2);
@@ -2442,7 +2442,7 @@ int main (void)
       ffi_cif cif;
       FFI_PREP_CIF(cif,argtypes,ffi_type_T);
       PREP_CALLBACK(cif,T_TcT_simulator,(void*)&T_TcT);
-      Tr = ((T (*) (T,char,T)) callback_code) (T1,' ',T2);
+      Tr = ((T (ABI_ATTR *) (T,char,T)) callback_code) (T1,' ',T2);
     }
     FREE_CALLBACK();
     fprintf(out,"->{\"%c%c%c\"}\n",Tr.c[0],Tr.c[1],Tr.c[2]);
@@ -2467,7 +2467,7 @@ int main (void)
       ffi_cif cif;
       FFI_PREP_CIF(cif,argtypes,ffi_type_X);
       PREP_CALLBACK(cif,X_BcdB_simulator,(void*)&X_BcdB);
-      Xr = ((X (*) (B,char,double,B)) callback_code) (B1,c2,d3,B2);
+      Xr = ((X (ABI_ATTR *) (B,char,double,B)) callback_code) (B1,c2,d3,B2);
     }
     FREE_CALLBACK();
     fprintf(out,"->{\"%s\",'%c'}\n",Xr.c,Xr.c1);
@@ -2510,7 +2510,7 @@ int main (void)
       ffi_cif cif;
       FFI_PREP_CIF(cif,argtypes,ffi_type_slong);
       PREP_CALLBACK(cif,l_l0K_simulator,(void*)l_l0K);
-      lr = ((long (*) (K,long)) callback_code) (K1,l9);
+      lr = ((long (ABI_ATTR *) (K,long)) callback_code) (K1,l9);
     }
     FREE_CALLBACK();
     fprintf(out,"->%ld\n",lr);
@@ -2528,7 +2528,7 @@ int main (void)
       ffi_cif cif;
       FFI_PREP_CIF(cif,argtypes,ffi_type_slong);
       PREP_CALLBACK(cif,l_l1K_simulator,(void*)l_l1K);
-      lr = ((long (*) (long,K,long)) callback_code) (l1,K1,l9);
+      lr = ((long (ABI_ATTR *) (long,K,long)) callback_code) (l1,K1,l9);
     }
     FREE_CALLBACK();
     fprintf(out,"->%ld\n",lr);
@@ -2546,7 +2546,7 @@ int main (void)
       ffi_cif cif;
       FFI_PREP_CIF(cif,argtypes,ffi_type_slong);
       PREP_CALLBACK(cif,l_l2K_simulator,(void*)l_l2K);
-      lr = ((long (*) (long,long,K,long)) callback_code) (l1,l2,K1,l9);
+      lr = ((long (ABI_ATTR *) (long,long,K,long)) callback_code) (l1,l2,K1,l9);
     }
     FREE_CALLBACK();
     fprintf(out,"->%ld\n",lr);
@@ -2564,7 +2564,7 @@ int main (void)
       ffi_cif cif;
       FFI_PREP_CIF(cif,argtypes,ffi_type_slong);
       PREP_CALLBACK(cif,l_l3K_simulator,(void*)l_l3K);
-      lr = ((long (*) (long,long,long,K,long)) callback_code) (l1,l2,l3,K1,l9);
+      lr = ((long (ABI_ATTR *) (long,long,long,K,long)) callback_code) (l1,l2,l3,K1,l9);
     }
     FREE_CALLBACK();
     fprintf(out,"->%ld\n",lr);
@@ -2582,7 +2582,7 @@ int main (void)
       ffi_cif cif;
       FFI_PREP_CIF(cif,argtypes,ffi_type_slong);
       PREP_CALLBACK(cif,l_l4K_simulator,(void*)l_l4K);
-      lr = ((long (*) (long,long,long,long,K,long)) callback_code) (l1,l2,l3,l4,K1,l9);
+      lr = ((long (ABI_ATTR *) (long,long,long,long,K,long)) callback_code) (l1,l2,l3,l4,K1,l9);
     }
     FREE_CALLBACK();
     fprintf(out,"->%ld\n",lr);
@@ -2600,7 +2600,7 @@ int main (void)
       ffi_cif cif;
       FFI_PREP_CIF(cif,argtypes,ffi_type_slong);
       PREP_CALLBACK(cif,l_l5K_simulator,(void*)l_l5K);
-      lr = ((long (*) (long,long,long,long,long,K,long)) callback_code) (l1,l2,l3,l4,l5,K1,l9);
+      lr = ((long (ABI_ATTR *) (long,long,long,long,long,K,long)) callback_code) (l1,l2,l3,l4,l5,K1,l9);
     }
     FREE_CALLBACK();
     fprintf(out,"->%ld\n",lr);
@@ -2618,7 +2618,7 @@ int main (void)
       ffi_cif cif;
       FFI_PREP_CIF(cif,argtypes,ffi_type_slong);
       PREP_CALLBACK(cif,l_l6K_simulator,(void*)l_l6K);
-      lr = ((long (*) (long,long,long,long,long,long,K,long)) callback_code) (l1,l2,l3,l4,l5,l6,K1,l9);
+      lr = ((long (ABI_ATTR *) (long,long,long,long,long,long,K,long)) callback_code) (l1,l2,l3,l4,l5,l6,K1,l9);
     }
     FREE_CALLBACK();
     fprintf(out,"->%ld\n",lr);
@@ -2636,7 +2636,7 @@ int main (void)
       ffi_cif cif;
       FFI_PREP_CIF(cif,argtypes,ffi_type_float);
       PREP_CALLBACK(cif,f_f17l3L_simulator,(void*)&f_f17l3L);
-      fr = ((float (*) (float,float,float,float,float,float,float,float,float,float,float,float,float,float,float,float,float,long,long,long,L)) callback_code) (f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11,f12,f13,f14,f15,f16,f17,l6,l7,l8,L1);
+      fr = ((float (ABI_ATTR *) (float,float,float,float,float,float,float,float,float,float,float,float,float,float,float,float,float,long,long,long,L)) callback_code) (f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11,f12,f13,f14,f15,f16,f17,l6,l7,l8,L1);
     }
     FREE_CALLBACK();
     fprintf(out,"->%g\n",fr);
@@ -2654,7 +2654,7 @@ int main (void)
       ffi_cif cif;
       FFI_PREP_CIF(cif,argtypes,ffi_type_double);
       PREP_CALLBACK(cif,d_d17l3L_simulator,(void*)&d_d17l3L);
-      dr = ((double (*) (double,double,double,double,double,double,double,double,double,double,double,double,double,double,double,double,double,long,long,long,L)) callback_code) (d1,d2,d3,d4,d5,d6,d7,d8,d9,d10,d11,d12,d13,d14,d15,d16,d17,l6,l7,l8,L1);
+      dr = ((double (ABI_ATTR *) (double,double,double,double,double,double,double,double,double,double,double,double,double,double,double,double,double,long,long,long,L)) callback_code) (d1,d2,d3,d4,d5,d6,d7,d8,d9,d10,d11,d12,d13,d14,d15,d16,d17,l6,l7,l8,L1);
     }
     FREE_CALLBACK();
     fprintf(out,"->%g\n",dr);
@@ -2672,7 +2672,7 @@ int main (void)
       ffi_cif cif;
       FFI_PREP_CIF(cif,argtypes,ffi_type_slonglong);
       PREP_CALLBACK(cif,ll_l2ll_simulator,(void*)ll_l2ll);
-      llr = ((long long (*) (long,long,long long,long)) callback_code) (l1,l2,ll1,l9);
+      llr = ((long long (ABI_ATTR *) (long,long,long long,long)) callback_code) (l1,l2,ll1,l9);
     }
     FREE_CALLBACK();
     fprintf(out,"->0x%lx%08lx\n",(long)(llr>>32),(long)(llr&0xffffffff));
@@ -2690,7 +2690,7 @@ int main (void)
       ffi_cif cif;
       FFI_PREP_CIF(cif,argtypes,ffi_type_slonglong);
       PREP_CALLBACK(cif,ll_l3ll_simulator,(void*)ll_l3ll);
-      llr = ((long long (*) (long,long,long,long long,long)) callback_code) (l1,l2,l3,ll1,l9);
+      llr = ((long long (ABI_ATTR *) (long,long,long,long long,long)) callback_code) (l1,l2,l3,ll1,l9);
     }
     FREE_CALLBACK();
     fprintf(out,"->0x%lx%08lx\n",(long)(llr>>32),(long)(llr&0xffffffff));
@@ -2708,7 +2708,7 @@ int main (void)
       ffi_cif cif;
       FFI_PREP_CIF(cif,argtypes,ffi_type_slonglong);
       PREP_CALLBACK(cif,ll_l4ll_simulator,(void*)ll_l4ll);
-      llr = ((long long (*) (long,long,long,long,long long,long)) callback_code) (l1,l2,l3,l4,ll1,l9);
+      llr = ((long long (ABI_ATTR *) (long,long,long,long,long long,long)) callback_code) (l1,l2,l3,l4,ll1,l9);
     }
     FREE_CALLBACK();
     fprintf(out,"->0x%lx%08lx\n",(long)(llr>>32),(long)(llr&0xffffffff));
@@ -2726,7 +2726,7 @@ int main (void)
       ffi_cif cif;
       FFI_PREP_CIF(cif,argtypes,ffi_type_slonglong);
       PREP_CALLBACK(cif,ll_l5ll_simulator,(void*)ll_l5ll);
-      llr = ((long long (*) (long,long,long,long,long,long long,long)) callback_code) (l1,l2,l3,l4,l5,ll1,l9);
+      llr = ((long long (ABI_ATTR *) (long,long,long,long,long,long long,long)) callback_code) (l1,l2,l3,l4,l5,ll1,l9);
     }
     FREE_CALLBACK();
     fprintf(out,"->0x%lx%08lx\n",(long)(llr>>32),(long)(llr&0xffffffff));
@@ -2744,7 +2744,7 @@ int main (void)
       ffi_cif cif;
       FFI_PREP_CIF(cif,argtypes,ffi_type_slonglong);
       PREP_CALLBACK(cif,ll_l6ll_simulator,(void*)ll_l6ll);
-      llr = ((long long (*) (long,long,long,long,long,long,long long,long)) callback_code) (l1,l2,l3,l4,l5,l6,ll1,l9);
+      llr = ((long long (ABI_ATTR *) (long,long,long,long,long,long,long long,long)) callback_code) (l1,l2,l3,l4,l5,l6,ll1,l9);
     }
     FREE_CALLBACK();
     fprintf(out,"->0x%lx%08lx\n",(long)(llr>>32),(long)(llr&0xffffffff));
@@ -2762,7 +2762,7 @@ int main (void)
       ffi_cif cif;
       FFI_PREP_CIF(cif,argtypes,ffi_type_slonglong);
       PREP_CALLBACK(cif,ll_l7ll_simulator,(void*)ll_l7ll);
-      llr = ((long long (*) (long,long,long,long,long,long,long,long long,long)) callback_code) (l1,l2,l3,l4,l5,l6,l7,ll1,l9);
+      llr = ((long long (ABI_ATTR *) (long,long,long,long,long,long,long,long long,long)) callback_code) (l1,l2,l3,l4,l5,l6,l7,ll1,l9);
     }
     FREE_CALLBACK();
     fprintf(out,"->0x%lx%08lx\n",(long)(llr>>32),(long)(llr&0xffffffff));
@@ -2780,7 +2780,7 @@ int main (void)
       ffi_cif cif;
       FFI_PREP_CIF(cif,argtypes,ffi_type_double);
       PREP_CALLBACK(cif,d_l2d_simulator,(void*)d_l2d);
-      dr = ((double (*) (long,long,double,long)) callback_code) (l1,l2,ll1,l9);
+      dr = ((double (ABI_ATTR *) (long,long,double,long)) callback_code) (l1,l2,ll1,l9);
     }
     FREE_CALLBACK();
     fprintf(out,"->%g\n",dr);
@@ -2798,7 +2798,7 @@ int main (void)
       ffi_cif cif;
       FFI_PREP_CIF(cif,argtypes,ffi_type_double);
       PREP_CALLBACK(cif,d_l3d_simulator,(void*)d_l3d);
-      dr = ((double (*) (long,long,long,double,long)) callback_code) (l1,l2,l3,ll1,l9);
+      dr = ((double (ABI_ATTR *) (long,long,long,double,long)) callback_code) (l1,l2,l3,ll1,l9);
     }
     FREE_CALLBACK();
     fprintf(out,"->%g\n",dr);
@@ -2816,7 +2816,7 @@ int main (void)
       ffi_cif cif;
       FFI_PREP_CIF(cif,argtypes,ffi_type_double);
       PREP_CALLBACK(cif,d_l4d_simulator,(void*)d_l4d);
-      dr = ((double (*) (long,long,long,long,double,long)) callback_code) (l1,l2,l3,l4,ll1,l9);
+      dr = ((double (ABI_ATTR *) (long,long,long,long,double,long)) callback_code) (l1,l2,l3,l4,ll1,l9);
     }
     FREE_CALLBACK();
     fprintf(out,"->%g\n",dr);
@@ -2834,7 +2834,7 @@ int main (void)
       ffi_cif cif;
       FFI_PREP_CIF(cif,argtypes,ffi_type_double);
       PREP_CALLBACK(cif,d_l5d_simulator,(void*)d_l5d);
-      dr = ((double (*) (long,long,long,long,long,double,long)) callback_code) (l1,l2,l3,l4,l5,ll1,l9);
+      dr = ((double (ABI_ATTR *) (long,long,long,long,long,double,long)) callback_code) (l1,l2,l3,l4,l5,ll1,l9);
     }
     FREE_CALLBACK();
     fprintf(out,"->%g\n",dr);
@@ -2852,7 +2852,7 @@ int main (void)
       ffi_cif cif;
       FFI_PREP_CIF(cif,argtypes,ffi_type_double);
       PREP_CALLBACK(cif,d_l6d_simulator,(void*)d_l6d);
-      dr = ((double (*) (long,long,long,long,long,long,double,long)) callback_code) (l1,l2,l3,l4,l5,l6,ll1,l9);
+      dr = ((double (ABI_ATTR *) (long,long,long,long,long,long,double,long)) callback_code) (l1,l2,l3,l4,l5,l6,ll1,l9);
     }
     FREE_CALLBACK();
     fprintf(out,"->%g\n",dr);
@@ -2870,7 +2870,7 @@ int main (void)
       ffi_cif cif;
       FFI_PREP_CIF(cif,argtypes,ffi_type_double);
       PREP_CALLBACK(cif,d_l7d_simulator,(void*)d_l7d);
-      dr = ((double (*) (long,long,long,long,long,long,long,double,long)) callback_code) (l1,l2,l3,l4,l5,l6,l7,ll1,l9);
+      dr = ((double (ABI_ATTR *) (long,long,long,long,long,long,long,double,long)) callback_code) (l1,l2,l3,l4,l5,l6,l7,ll1,l9);
     }
     FREE_CALLBACK();
     fprintf(out,"->%g\n",dr);
