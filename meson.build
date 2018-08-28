@@ -171,7 +171,7 @@ if host_system != 'windows'
 endif
 
 # User options
-if get_option('debug')
+if get_option('ffi-debug')
   ffi_conf.set('FFI_DEBUG')
 endif
 if not get_option('raw_api')
