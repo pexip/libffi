@@ -8,7 +8,7 @@ ffi_c_sources = [
 
 ffi_asm_sources = []
 
-if get_option('debug')
+if get_option('ffi-debug')
   ffi_c_sources += ['debug.c']
 endif
 
