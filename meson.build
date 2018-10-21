@@ -1,4 +1,4 @@
-project('libffi', 'c', version : '3.2.1',
+project('libffi', 'c', version : '3.2.9999',
         meson_version : '>= 0.47.0',
         default_options : ['buildtype=debugoptimized',
                            'warning_level=1'])
