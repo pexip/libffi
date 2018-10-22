@@ -84,8 +84,8 @@ else
       message('sizeof "long double" is greater than "double"')
       ffi_conf.set('HAVE_LONG_DOUBLE', 1)
       if host_cpu_family == 'powerpc' and host_system != 'darwin'
-	message('"long double" size can be different')
-	ffi_conf.set('HAVE_LONG_DOUBLE_VARIANT', 1)
+        message('"long double" size can be different')
+        ffi_conf.set('HAVE_LONG_DOUBLE_VARIANT', 1)
       endif
     endif
   endif
