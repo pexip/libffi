@@ -14,56 +14,62 @@ endif
 
 # This if/else ladder is based on the configure.host file
 TARGET = ''
-if host_system == 'windows' and host_cpu_family.startswith('x86')
-  # No ARM support for Windows in libffi
+if host_cpu_family.startswith('x86')
   arch_subdir = 'x86'
-  if size_t == 4
-    TARGET = 'X86_WIN32'
-    if cc.get_id() == 'msvc'
-      ffi_c_sources += ['x86/ffiold-msvc.c']
-      ffi_asm_sources += ['x86/win32_msvc.S']
-    else
-      ffi_c_sources += ['x86/ffi.c']
-      ffi_asm_sources += ['x86/sysv.S']
-    endif
-  else
-    TARGET = 'X86_WIN64'
-    ffi_c_sources += ['x86/ffiw64.c']
-    if cc.get_id() == 'msvc'
-      ffi_asm_sources += ['x86/win64_intel.S']
-    else
-      ffi_asm_sources += ['x86/win64.S']
-    endif
-  endif
-elif ['linux', 'android'].contains(host_system)
-  if host_cpu_family.startswith('x86')
-    arch_subdir = 'x86'
+  if host_system == 'windows'
     if size_t == 4
-      # FIXME: gnux32 support?
+      TARGET = 'X86_WIN32'
+      if cc.get_id() == 'msvc'
+        c_sources = ['ffiold-msvc.c']
+        asm_sources = ['win32_msvc.S']
+      else
+        c_sources = ['ffi.c']
+        asm_sources = ['sysv.S']
+      endif
+    else
+      TARGET = 'X86_WIN64'
+      c_sources = ['ffiw64.c']
+      if cc.get_id() == 'msvc'
+        asm_sources = ['win64_intel.S']
+      else
+        asm_sources = ['win64.S']
+      endif
+    endif
+  elif ['linux', 'android'].contains(host_system)
+    if size_t == 4
       TARGET = 'X86'
-      ffi_c_sources += ['x86/ffi.c']
-      ffi_asm_sources += ['x86/sysv.S']
+      # FIXME: TARGET_X32 support
+      c_sources = ['ffi.c']
+      asm_sources = ['sysv.S']
     else
       TARGET = 'X86_64'
-      ffi_c_sources += ['x86/ffi64.c', 'x86/ffiw64.c']
-      ffi_asm_sources += ['x86/unix64.S', 'x86/win64.S']
+      c_sources = ['ffi64.c', 'ffiw64.c']
+      asm_sources = ['unix64.S', 'win64.S']
     endif
-  elif host_cpu_family == 'aarch64'
-    arch_subdir = 'aarch64'
-    TARGET = 'AARCH64'
-    ffi_c_sources += ['aarch64/ffi.c']
-    ffi_asm_sources += ['aarch64/sysv.S']
-  elif host_cpu_family == 'arm'
-    arch_subdir = 'arm'
-    TARGET = 'ARM'
-    ffi_c_sources += ['arm/ffi.c']
-    ffi_asm_sources += ['arm/sysv.S']
   endif
+elif host_cpu_family == 'aarch64'
+  arch_subdir = 'aarch64'
+  TARGET = 'AARCH64'
+  c_sources = ['ffi.c']
+  asm_sources = ['sysv.S']
+elif host_cpu_family == 'arm'
+  arch_subdir = 'arm'
+  TARGET = 'ARM'
+  c_sources = ['ffi.c']
+  asm_sources = ['sysv.S']
 endif
 
 if TARGET == ''
   error('Unsupported pair: system "@0@", cpu family "@1@"'.format(host_system, host_cpu_family))
 endif
+
+# Translate source files to source paths
+foreach c : c_sources
+  ffi_c_sources += arch_subdir + '/' + c
+endforeach
+foreach asm : asm_sources
+  ffi_asm_sources += arch_subdir + '/' + asm
+endforeach
 
 # Used in ffi.h.in to generate ffi-$arch.h
 ffi_conf.set('TARGET', TARGET)
