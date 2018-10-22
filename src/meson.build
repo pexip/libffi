@@ -12,8 +12,9 @@ if get_option('ffi-debug')
   ffi_c_sources += ['debug.c']
 endif
 
-# We only support x86 on Windows and Linux right now
-if host_system == 'windows'
+# This if/else ladder is based on the configure.host file
+TARGET = ''
+if host_system == 'windows' and host_cpu_family.startswith('x86')
   # No ARM support for Windows in libffi
   arch_subdir = 'x86'
   if size_t == 4
@@ -34,25 +35,34 @@ if host_system == 'windows'
       ffi_asm_sources += ['x86/win64.S']
     endif
   endif
-elif host_system == 'linux' and host_cpu_family.startswith('x86')
-  arch_subdir = 'x86'
-  if size_t == 4
-    # FIXME: gnux32 support?
-    TARGET = 'X86'
-    ffi_c_sources += ['x86/ffi.c']
-    ffi_asm_sources += ['x86/sysv.S']
-  else
-    TARGET = 'X86_64'
-    ffi_c_sources += ['x86/ffi64.c', 'x86/ffiw64.c']
-    ffi_asm_sources += ['x86/unix64.S', 'x86/win64.S']
+elif ['linux', 'android'].contains(host_system)
+  if host_cpu_family.startswith('x86')
+    arch_subdir = 'x86'
+    if size_t == 4
+      # FIXME: gnux32 support?
+      TARGET = 'X86'
+      ffi_c_sources += ['x86/ffi.c']
+      ffi_asm_sources += ['x86/sysv.S']
+    else
+      TARGET = 'X86_64'
+      ffi_c_sources += ['x86/ffi64.c', 'x86/ffiw64.c']
+      ffi_asm_sources += ['x86/unix64.S', 'x86/win64.S']
+    endif
+  elif host_cpu_family == 'aarch64'
+    arch_subdir = 'aarch64'
+    TARGET = 'AARCH64'
+    ffi_c_sources += ['aarch64/ffi.c']
+    ffi_asm_sources += ['aarch64/sysv.S']
+  elif host_cpu_family == 'arm'
+    arch_subdir = 'arm'
+    TARGET = 'ARM'
+    ffi_c_sources += ['arm/ffi.c']
+    ffi_asm_sources += ['arm/sysv.S']
   endif
-elif host_system == 'linux' and host_cpu_family.startswith('aarch64')
-  arch_subdir = 'aarch64'
-  TARGET = 'AARCH64'
-  ffi_c_sources += ['aarch64/ffi.c']
-  ffi_asm_sources += ['aarch64/sysv.S']
-else
-  error('Unsupported system "@0@" or cpu family "@1@"'.format(host_system, host_cpu_family))
+endif
+
+if TARGET == ''
+  error('Unsupported pair: system "@0@", cpu family "@1@"'.format(host_system, host_cpu_family))
 endif
 
 # Used in ffi.h.in to generate ffi-$arch.h
