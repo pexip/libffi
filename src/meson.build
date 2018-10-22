@@ -35,10 +35,14 @@ if host_cpu_family.startswith('x86')
         asm_sources = ['win64.S']
       endif
     endif
-  elif ['linux', 'android'].contains(host_system)
+  elif ['darwin', 'linux', 'android'].contains(host_system)
     if size_t == 4
-      TARGET = 'X86'
+      if host_system == 'darwin'
+        TARGET = 'X86_DARWIN'
+      else
+        TARGET = 'X86'
       # FIXME: TARGET_X32 support
+      endif
       c_sources = ['ffi.c']
       asm_sources = ['sysv.S']
     else
