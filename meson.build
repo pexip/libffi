@@ -1,5 +1,5 @@
 project('libffi', 'c', version : '3.2.9999',
-        meson_version : '>= 0.47.0',
+        meson_version : '>= 0.48.0',
         default_options : ['buildtype=debugoptimized',
                            'warning_level=1'])
 
@@ -163,10 +163,15 @@ ffi_conf.set('HAVE_STDINT_H', cc.has_header('stdint.h'))
 #ffi_conf.set10('HAVE_UNISTD_H', cc.has_header('unistd.h'))
 
 # Misc defines
-# FIXME: Check if this is compiler-specific check is correct
-if host_system != 'windows'
-  message('Host system is not Windows; assuming .hidden pseudo-op is available')
-  ffi_conf.set('HAVE_HIDDEN_VISIBILITY_ATTRIBUTE', 1)
+if cc.has_function_attribute('visibility')
+  t = find_program('test-cc-supports-hidden-visibility.py')
+  res = run_command(t, cc.cmd_array())
+  if res.returncode() == 0
+    message('.hidden pseudo-op is available')
+    ffi_conf.set('HAVE_HIDDEN_VISIBILITY_ATTRIBUTE', 1)
+  else
+    message('.hidden pseudo-op is NOT available: ' + res.stdout() + res.stderr())
+  endif
 endif
 
 # User options
