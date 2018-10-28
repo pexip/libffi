@@ -43,7 +43,24 @@
 
 #else
 extern unsigned int ffi_arm_trampoline[2] FFI_HIDDEN;
+
+#if defined (__clang__) && defined (__APPLE__)
+extern void sys_icache_invalidate (void *start, size_t len);
 #endif
+
+static inline void
+ffi_clear_cache (void *start, void *end)
+{
+#if defined (__clang__) && defined (__APPLE__)
+  sys_icache_invalidate (start, (char *)end - (char *)start);
+#elif defined (__GNUC__)
+  __builtin___clear_cache (start, end);
+#else
+#error "Missing builtin to flush instruction cache"
+#endif
+}
+
+#endif /* __MACH__ */
 
 /* Forward declares. */
 static int vfp_type_p (const ffi_type *);
@@ -576,8 +593,8 @@ ffi_prep_closure_loc (ffi_closure * closure,
   msync(closure->tramp, 8, 0x1000000);	/* clear data map */
   msync(codeloc, 8, 0x1000000);	/* clear insn map */
 #else
-  __clear_cache(closure->tramp, closure->tramp + 8);	/* clear data map */
-  __clear_cache(codeloc, codeloc + 8);			/* clear insn map */
+  ffi_clear_cache(closure->tramp, closure->tramp + 8);	/* clear data map */
+  ffi_clear_cache(codeloc, codeloc + 8);			/* clear insn map */
 #endif
   *(void (**)(void))(closure->tramp + 8) = closure_func;
 #endif
