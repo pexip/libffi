@@ -35,9 +35,9 @@ if host_cpu_family.startswith('x86')
         asm_sources = ['win64.S']
       endif
     endif
-  elif ['darwin', 'linux', 'android'].contains(host_system)
+  elif ['darwin', 'ios', 'linux', 'android'].contains(host_system)
     if size_t == 4
-      if host_system == 'darwin'
+      if ['darwin', 'ios'].contains(host_system)
         TARGET = 'X86_DARWIN'
       else
         TARGET = 'X86'
