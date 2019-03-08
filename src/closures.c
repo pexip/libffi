@@ -664,10 +664,10 @@ static struct
   const char *arg;
   int repeat;
 } open_temp_exec_file_opts[] = {
+  { open_temp_exec_file_dir, "/dev/shm", 0 },
   { open_temp_exec_file_env, "TMPDIR", 0 },
   { open_temp_exec_file_dir, "/tmp", 0 },
   { open_temp_exec_file_dir, "/var/tmp", 0 },
-  { open_temp_exec_file_dir, "/dev/shm", 0 },
   { open_temp_exec_file_env, "HOME", 0 },
 #ifdef HAVE_MNTENT
   { open_temp_exec_file_mnt, "/etc/mtab", 1 },
