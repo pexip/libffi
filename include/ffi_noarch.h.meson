@@ -10,7 +10,7 @@
 #include "@HEADER@-x86_64.h"
 #elif defined(__arm__) || defined(_M_ARM)
 #include "@HEADER@-arm.h"
-#elif defined(__aarch64__)
+#elif defined(__aarch64__) || defined(_M_ARM64)
 #include "@HEADER@-aarch64.h"
 #elif defined(__powerpc__) || defined(_M_PPC)
 #include "@HEADER@-powerpc.h"
