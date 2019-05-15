@@ -92,17 +92,15 @@ else
 endif
 
 # Exception handling frame
-if cc.get_id() == 'gcc' or cc.get_id() == 'clang'
-  # FIXME: Actually check for this instead of hard-coding it
-  # Also, check if this is actually correct
-  if host_cpu_family == 'x86_64'
-    message('.eh_frame is hard-coded to not be ro')
-    ffi_conf.set('EH_FRAME_FLAGS', '"aw"')
-  else
-    message('.eh_frame is hard-coded to ro')
-    ffi_conf.set('HAVE_RO_EH_FRAME', 1)
-    ffi_conf.set('EH_FRAME_FLAGS', '"a"')
-  endif
+# FIXME: Actually check for this instead of hard-coding it
+# Also, check if this is actually correct
+if host_cpu_family == 'x86_64'
+  message('.eh_frame is hard-coded to not be ro')
+  ffi_conf.set('EH_FRAME_FLAGS', '"aw"')
+else
+  message('.eh_frame is hard-coded to ro')
+  ffi_conf.set('HAVE_RO_EH_FRAME', 1)
+  ffi_conf.set('EH_FRAME_FLAGS', '"a"')
 endif
 
 if ['arm', 'aarch64'].contains(host_cpu_family) and host_system == 'darwin'
