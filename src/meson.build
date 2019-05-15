@@ -55,7 +55,11 @@ elif host_cpu_family == 'aarch64'
   arch_subdir = 'aarch64'
   TARGET = 'AARCH64'
   c_sources = ['ffi.c']
-  asm_sources = ['sysv.S']
+  if cc.get_id() == 'msvc'
+    asm_sources = ['win64_armasm.S']
+  else
+    asm_sources = ['sysv.S']
+  endif
 elif host_cpu_family == 'arm'
   arch_subdir = 'arm'
   TARGET = 'ARM'
@@ -85,7 +89,19 @@ if cc.get_id() == 'msvc'
   # then through the assembler, and then link the objects into the target.
   # FIXME: Add native support in Meson for this.
   cl = find_program('cl')
-  ml = find_program('ml', 'ml64')
+  if host_cpu_family.startswith('x86')
+    assembler_args = [find_program('ml', 'ml64'), '/Fo', '@OUTPUT@', '/c', '@INPUT@']
+    if get_option('buildtype').startswith('debug')
+      assembler_args += ['/Zi', '/Zd']
+    endif
+  elif host_cpu_family == 'aarch64'
+    assembler_args = [find_program('armasm64'), '-o', '@OUTPUT@', '@INPUT@']
+    if get_option('buildtype').startswith('debug')
+      assembler_args += ['-g']
+    endif
+  else
+    error('Unsupported MSVC target: ' + host_cpu_family)
+  endif
   ffi_asm_objs = []
   foreach asm_source : ffi_asm_sources
     incflags = ['/I' + join_paths(meson.current_source_dir(), '..'),
@@ -103,7 +119,7 @@ if cc.get_id() == 'msvc'
     ffi_asm_objs += custom_target(obj_name,
         input : preproc,
         output : obj_name,
-        command : [ml, '/Fo', '@OUTPUT@', '/c', '@INPUT@'])
+        command : assembler_args)
   endforeach
   ffi_asm_sources = ffi_asm_objs
 endif
