@@ -123,27 +123,28 @@ if host_cpu_family == 'x86_64' and cc.get_id() != 'msvc'
 endif
 
 # Check mmap()
-if cc.has_function('mmap')
-  ffi_conf.set('HAVE_MMAP', 1)
-endif
-ffi_conf.set('HAVE_MMAP_FILE', 1) # Works everywhere
-ffi_conf.set('HAVE_MMAP_DEV_ZERO',
-  host_system != 'windows' and host_system != 'darwin')
-mmap_anon = '''#include <sys/types.h>
-#include <sys/mman.h>
-#include <unistd.h>
-
-#ifndef MAP_ANONYMOUS
-#define MAP_ANONYMOUS MAP_ANON
+# XXX: All these are unused
+#if cc.has_function('mmap')
+#  ffi_conf.set('HAVE_MMAP', 1)
 #endif
-
-int n = MAP_ANONYMOUS;
-'''
-ffi_conf.set('HAVE_MMAP_ANON',
-  cc.compiles(mmap_anon, name : 'mmap anonymous'))
+#ffi_conf.set('HAVE_MMAP_FILE', 1) # Works everywhere
+#ffi_conf.set('HAVE_MMAP_DEV_ZERO',
+#  host_system != 'windows' and host_system != 'darwin')
+#mmap_anon = '''#include <sys/types.h>
+##include <sys/mman.h>
+##include <unistd.h>
+#
+##ifndef MAP_ANONYMOUS
+##define MAP_ANONYMOUS MAP_ANON
+##endif
+#
+#int n = MAP_ANONYMOUS;
+#'''
+#ffi_conf.set('HAVE_MMAP_ANON',
+#  cc.compiles(mmap_anon, name : 'mmap anonymous'))
 
 # Misc functions
-ffi_conf.set('HAVE_ALLOCA', cc.has_function('alloca'))
+#ffi_conf.set('HAVE_ALLOCA', cc.has_function('alloca')) # XXX: unused
 ffi_conf.set10('HAVE_MEMCPY', cc.has_function('memcpy'))
 ffi_conf.set('HAVE_MKOSTEMP', cc.has_function('mkostemp'))
 
