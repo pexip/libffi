@@ -176,7 +176,7 @@ endif
 
 # User options
 if get_option('ffi-debug')
-  ffi_conf.set('FFI_DEBUG')
+  ffi_conf.set('FFI_DEBUG', 1)
 endif
 if not get_option('raw_api')
   ffi_conf.set('FFI_NO_RAW_API', 1)
