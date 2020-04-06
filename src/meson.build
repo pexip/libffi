@@ -90,7 +90,14 @@ if cc.get_id() == 'msvc'
   # FIXME: Add native support in Meson for this.
   cl = find_program('cl')
   if host_cpu_family.startswith('x86')
-    assembler_args = [find_program('ml', 'ml64'), '/Fo', '@OUTPUT@', '/c', '@INPUT@']
+    if host_cpu_family == 'x86'
+      ml = find_program('ml')
+    elif host_cpu_family == 'x86_64'
+      ml = find_program('ml64')
+    else
+      error('Unknown cpu_family: ' + host_cpu_family)
+    endif
+    assembler_args = [ml, '/Fo', '@OUTPUT@', '/c', '@INPUT@']
     if get_option('buildtype').startswith('debug')
       assembler_args += ['/Zi', '/Zd']
     endif
