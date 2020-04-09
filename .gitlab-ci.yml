@@ -1,5 +1,5 @@
 variables:
-  WINDOWS_IMAGE: 'registry.freedesktop.org/gstreamer/gst-ci/amd64/windows:v8'
+  WINDOWS_IMAGE: 'registry.freedesktop.org/gstreamer/gst-ci/amd64/windows:v10'
 
 .build windows:
   image: $WINDOWS_IMAGE
