@@ -19,7 +19,7 @@ if host_cpu_family.startswith('x86')
   if host_system == 'windows'
     if size_t == 4
       TARGET = 'X86_WIN32'
-      if cc.get_id() == 'msvc'
+      if is_msvc_like
         c_sources = ['ffiold-msvc.c']
         asm_sources = ['win32_msvc.S']
       else
@@ -29,7 +29,7 @@ if host_cpu_family.startswith('x86')
     else
       TARGET = 'X86_WIN64'
       c_sources = ['ffiw64.c']
-      if cc.get_id() == 'msvc'
+      if is_msvc_like
         asm_sources = ['win64_intel.S']
       else
         asm_sources = ['win64.S']
@@ -55,7 +55,7 @@ elif host_cpu_family == 'aarch64'
   arch_subdir = 'aarch64'
   TARGET = 'AARCH64'
   c_sources = ['ffi.c']
-  if cc.get_id() == 'msvc'
+  if is_msvc_like
     asm_sources = ['win64_armasm.S']
   else
     asm_sources = ['sysv.S']
@@ -83,7 +83,7 @@ endforeach
 ffi_conf.set('TARGET', TARGET)
 ffi_conf.set('VERSION', meson.project_version())
 
-if cc.get_id() == 'msvc'
+if is_msvc_like
   # GCC and Clang accept assembly files directly, but MSVC's cl.exe does not.
   # You need to manually pass the files through the pre-processor first and
   # then through the assembler, and then link the objects into the target.

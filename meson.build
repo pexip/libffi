@@ -5,6 +5,8 @@ project('libffi', 'c', version : '3.2.9999',
 
 cc = meson.get_compiler('c')
 
+is_msvc_like = ['msvc', 'clang-cl'].contains(cc.get_id())
+
 # For FFI_EXTERN symbol exporting
 add_project_arguments('-DFFI_BUILDING', language : 'c')
 
@@ -114,7 +116,7 @@ else
   endif
 endif
 
-if host_cpu_family == 'x86_64' and cc.get_id() != 'msvc'
+if host_cpu_family == 'x86_64' and not is_msvc_like
   # FIXME: Actually check for this instead of hard-coding it
   message('Assembler supports .unwind section type')
   ffi_conf.set('HAVE_AS_X86_64_UNWIND_SECTION_TYPE', 1)
