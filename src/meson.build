@@ -12,65 +12,6 @@ if get_option('ffi-debug')
   ffi_c_sources += ['debug.c']
 endif
 
-# This if/else ladder is based on the configure.host file
-TARGET = ''
-if host_cpu_family.startswith('x86')
-  arch_subdir = 'x86'
-  if host_system == 'windows'
-    if size_t == 4
-      TARGET = 'X86_WIN32'
-      if is_msvc_like
-        c_sources = ['ffiold-msvc.c']
-        asm_sources = ['win32_msvc.S']
-      else
-        c_sources = ['ffi.c']
-        asm_sources = ['sysv.S']
-      endif
-    else
-      TARGET = 'X86_WIN64'
-      c_sources = ['ffiw64.c']
-      if is_msvc_like
-        asm_sources = ['win64_intel.S']
-      else
-        asm_sources = ['win64.S']
-      endif
-    endif
-  elif ['darwin', 'ios', 'linux', 'android'].contains(host_system)
-    if size_t == 4
-      if ['darwin', 'ios'].contains(host_system)
-        TARGET = 'X86_DARWIN'
-      else
-        TARGET = 'X86'
-      # FIXME: TARGET_X32 support
-      endif
-      c_sources = ['ffi.c']
-      asm_sources = ['sysv.S']
-    else
-      TARGET = 'X86_64'
-      c_sources = ['ffi64.c', 'ffiw64.c']
-      asm_sources = ['unix64.S', 'win64.S']
-    endif
-  endif
-elif host_cpu_family == 'aarch64'
-  arch_subdir = 'aarch64'
-  TARGET = 'AARCH64'
-  c_sources = ['ffi.c']
-  if is_msvc_like
-    asm_sources = ['win64_armasm.S']
-  else
-    asm_sources = ['sysv.S']
-  endif
-elif host_cpu_family == 'arm'
-  arch_subdir = 'arm'
-  TARGET = 'ARM'
-  c_sources = ['ffi.c']
-  asm_sources = ['sysv.S']
-endif
-
-if TARGET == ''
-  error('Unsupported pair: system "@0@", cpu family "@1@"'.format(host_system, host_cpu_family))
-endif
-
 # Translate source files to source paths
 foreach c : c_sources
   ffi_c_sources += arch_subdir + '/' + c
@@ -78,10 +19,6 @@ endforeach
 foreach asm : asm_sources
   ffi_asm_sources += arch_subdir + '/' + asm
 endforeach
-
-# Used in ffi.h.in to generate ffi-$arch.h
-ffi_conf.set('TARGET', TARGET)
-ffi_conf.set('VERSION', meson.project_version())
 
 if is_msvc_like
   # GCC and Clang accept assembly files directly, but MSVC's cl.exe does not.
@@ -131,9 +68,34 @@ if is_msvc_like
   ffi_asm_sources = ffi_asm_objs
 endif
 
+ffi_link_args = []
+
+if get_option('ffi-build-versioned') and cc.has_argument('-x assembler-with-cpp')
+  ffi_map_file = 'libffi.map'
+  ffi_symbol_map = configure_file(
+      output: ffi_map_file,
+      command : [meson.get_compiler('c'),
+                 '-I' + join_paths(meson.current_build_dir(), '..'),
+                 '-I' + join_paths(meson.current_build_dir(), '..','include'),
+                 '-D' + TARGET,
+                 '-E',
+                 '-x',
+                 'assembler-with-cpp',
+                 join_paths(meson.current_source_dir(),'../libffi.map.in'),
+                 '-o',
+                 '@OUTPUT@'
+                 ]
+    )
+  version_link_arg = '-Wl,--version-script=@0@'.format(join_paths(meson.current_build_dir(), ffi_map_file))
+  if cc.has_link_argument([version_link_arg])
+    ffi_link_args += version_link_arg
+  endif
+endif
+
 ffi_lib = library('ffi', ffi_c_sources, ffi_asm_sources,
   c_args : '-DTARGET=' + TARGET,
   include_directories : ffiinc,
+  link_args: ffi_link_args,
   # Taken from the libtool-version file
   # current - age . age . revision
   version : '7.1.0',

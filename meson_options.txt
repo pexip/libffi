@@ -9,3 +9,5 @@ option('purify_safety', type : 'boolean', value : false)
 # Toggle this if you want to enable pax emulated trampolines for PaX kernels
 # On PaX enable kernels that have MPROTECT enabled we can't use PROT_EXEC
 option('pax_emutramp', type : 'boolean', value : false)
+# Toggle this if you don't want the versioned build
+option('ffi-build-versioned', type : 'boolean', value : true)

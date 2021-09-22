@@ -1,5 +1,5 @@
 project('libffi', 'c', version : '3.2.9999',
-        meson_version : '>= 0.48.0',
+        meson_version : '>= 0.49.0',
         default_options : ['buildtype=debugoptimized',
                            'warning_level=1'])
 
@@ -192,19 +192,82 @@ if get_option('pax_emutramp')
   ffi_conf.set('FFI_MMAP_EXEC_EMUTRAMP_PAX', 1)
 endif
 
-msvcc = find_program('msvcc.sh')
+# This if/else ladder is based on the configure.host file
+TARGET = ''
+if host_cpu_family.startswith('x86')
+  arch_subdir = 'x86'
+  if host_system == 'windows'
+    if size_t == 4
+      TARGET = 'X86_WIN32'
+      if is_msvc_like
+        c_sources = ['ffiold-msvc.c']
+        asm_sources = ['win32_msvc.S']
+      else
+        c_sources = ['ffi.c']
+        asm_sources = ['sysv.S']
+      endif
+    else
+      TARGET = 'X86_WIN64'
+      c_sources = ['ffiw64.c']
+      if is_msvc_like
+        asm_sources = ['win64_intel.S']
+      else
+        asm_sources = ['win64.S']
+      endif
+    endif
+  elif ['darwin', 'ios', 'linux', 'android'].contains(host_system)
+    if size_t == 4
+      if ['darwin', 'ios'].contains(host_system)
+        TARGET = 'X86_DARWIN'
+      else
+        TARGET = 'X86'
+      # FIXME: TARGET_X32 support
+      endif
+      c_sources = ['ffi.c']
+      asm_sources = ['sysv.S']
+    else
+      TARGET = 'X86_64'
+      c_sources = ['ffi64.c', 'ffiw64.c']
+      asm_sources = ['unix64.S', 'win64.S']
+    endif
+  endif
+elif host_cpu_family == 'aarch64'
+  arch_subdir = 'aarch64'
+  TARGET = 'AARCH64'
+  c_sources = ['ffi.c']
+  if is_msvc_like
+    asm_sources = ['win64_armasm.S']
+  else
+    asm_sources = ['sysv.S']
+  endif
+elif host_cpu_family == 'arm'
+  arch_subdir = 'arm'
+  TARGET = 'ARM'
+  c_sources = ['ffi.c']
+  asm_sources = ['sysv.S']
+endif
 
-ffiinc = [include_directories('.'), include_directories('include')]
+if TARGET == ''
+  error('Unsupported pair: system "@0@", cpu family "@1@"'.format(host_system, host_cpu_family))
+endif
 
-# Configure ffi_conf some more and declare libffi.so
-subdir('src')
-
-# Configure and install headers
-subdir('include')
+# Used in ffi.h.in to generate ffi-$arch.h
+ffi_conf.set('TARGET', TARGET)
+ffi_conf.set('VERSION', meson.project_version())
 
 # Configure fficonfig.h (not installed)
 configure_file(input : 'fficonfig.h.meson', output : 'fficonfig.h',
   configuration : ffi_conf)
+
+msvcc = find_program('msvcc.sh')
+
+ffiinc = [include_directories('.'), include_directories('include')]
+
+# Configure and install headers
+subdir('include')
+
+# Configure ffi_conf some more and declare libffi.so
+subdir('src')
 
 # TODO: Install texinfo files
 install_man([
