@@ -1,5 +1,6 @@
 variables:
   WINDOWS_IMAGE: 'registry.freedesktop.org/gstreamer/gst-ci/amd64/windows:v10'
+  MESON_ARGS: --werror --fatal-meson-warnings
 
 .build windows:
   image: $WINDOWS_IMAGE
@@ -64,3 +65,23 @@ msys2:
     - C:\msys64\usr\bin\bash -c "meson --werror build $env:MESON_ARGS &&
         ninja -C build &&
         ninja -C build test"
+
+debian sid:
+  image: 'debian:sid'
+  stage: build
+  variables:
+    DEPENDENCIES: >
+      meson
+      ninja-build
+      build-essential
+  before_script:
+    - apt-get update
+    - apt-get install --yes ${DEPENDENCIES}
+  script:
+    - meson setup $MESON_ARGS build/
+    - meson compile -C build/
+    - meson test -C build/
+    - meson install -C build/
+  artifacts:
+    paths:
+      - build/meson-logs/
