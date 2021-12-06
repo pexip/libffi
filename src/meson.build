@@ -110,5 +110,11 @@ pkgconf.generate(ffi_lib,
   description : 'Library supporting Foreign Function Interfaces',
   filebase : 'libffi')
 
+c_args = []
+if get_option('default_library') == 'static'
+  c_args += ['-DFFI_STATIC_BUILD']
+endif
+
 ffi_dep = declare_dependency(link_with : ffi_lib,
+  compile_args: c_args,
   include_directories : ffiinc)
