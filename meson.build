@@ -9,6 +9,9 @@ is_msvc_like = ['msvc', 'clang-cl'].contains(cc.get_id())
 
 # For FFI_EXTERN symbol exporting
 add_project_arguments('-DFFI_BUILDING', language : 'c')
+if get_option('default_library') == 'static'
+  add_project_arguments('-DFFI_STATIC_BUILD', language : 'c')
+endif
 
 ffi_conf = configuration_data()
 
