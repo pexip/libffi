@@ -166,7 +166,7 @@ ffi_conf.set('HAVE_STDINT_H', cc.has_header('stdint.h'))
 # Misc defines
 if cc.has_function_attribute('visibility')
   t = find_program('test-cc-supports-hidden-visibility.py')
-  res = run_command(t, cc.cmd_array())
+  res = run_command(t, cc.cmd_array(), check: false)
   if res.returncode() == 0
     message('.hidden pseudo-op is available')
     ffi_conf.set('HAVE_HIDDEN_VISIBILITY_ATTRIBUTE', 1)
