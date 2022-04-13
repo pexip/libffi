@@ -75,6 +75,7 @@ if get_option('ffi-build-versioned') and cc.has_argument('-x assembler-with-cpp'
   ffi_symbol_map = configure_file(
       output: ffi_map_file,
       command : [meson.get_compiler('c'),
+                 get_option('c_args'),
                  '-I' + join_paths(meson.current_build_dir(), '..'),
                  '-I' + join_paths(meson.current_build_dir(), '..','include'),
                  '-D' + TARGET,
