@@ -248,6 +248,11 @@ elif host_cpu_family == 'arm'
   TARGET = 'ARM'
   c_sources = ['ffi.c']
   asm_sources = ['sysv.S']
+elif host_cpu_family == 'riscv64'
+  arch_subdir = 'riscv'
+  TARGET = 'RISCV'
+  c_sources = ['ffi.c']
+  asm_sources = ['sysv.S']
 endif
 
 if TARGET == ''
