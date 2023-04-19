@@ -6,7 +6,16 @@ project('libffi', 'c', version : '3.2.9999',
 cc = meson.get_compiler('c')
 
 # For FFI_EXTERN symbol exporting
-add_project_arguments('-DFFI_BUILDING', language : 'c')
+ffi_static_build = ''
+if get_option('default_library') == 'static'
+  ffi_static_build = '-DFFI_STATIC_BUILD'
+endif
+
+project_arguments = [
+  '-DFFI_BUILDING',
+  ffi_static_build,
+]
+add_project_arguments(project_arguments, language : 'c')
 
 ffi_conf = configuration_data()
 
@@ -201,6 +210,7 @@ ffi_pc_conf.set('libdir', '${prefix}/@0@'.format(get_option('libdir')))
 ffi_pc_conf.set('toolexeclibdir', '${libdir}')
 ffi_pc_conf.set('includedir', '${prefix}/@0@'.format(get_option('includedir')))
 ffi_pc_conf.set('PACKAGE_VERSION', meson.project_version())
+ffi_pc_conf.set('FFI_STATIC_BUILD', ffi_static_build)
 pkgconfigdir = join_paths(get_option('prefix'), get_option('libdir'), 'pkgconfig')
 configure_file(input : 'libffi.pc.in', output : 'libffi.pc',
   configuration : ffi_pc_conf,

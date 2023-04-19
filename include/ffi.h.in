@@ -90,11 +90,11 @@ extern "C" {
    the static version of the library, but don't worry about that.
    Besides, as a workaround, they can define FFI_BUILDING if they
    *know* they are going to link with the static library.  */
-#if defined _WIN32 && !defined FFI_STATIC_BUILD
+#if defined _MSC_VER && !defined FFI_STATIC_BUILD
 #ifdef FFI_BUILDING
 #define FFI_EXTERN __declspec(dllexport)
 #else
-#define FFI_EXTERN __declspec(dllimport)
+#define FFI_EXTERN __declspec(dllimport) extern
 #endif
 #else
 #define FFI_EXTERN extern

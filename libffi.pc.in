@@ -8,4 +8,4 @@ Name: libffi
 Description: Library supporting Foreign Function Interfaces
 Version: @PACKAGE_VERSION@
 Libs: -L${libdir} -lffi
-Cflags: -I${includedir}
+Cflags: -I${includedir} @FFI_STATIC_BUILD@
