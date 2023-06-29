@@ -126,5 +126,5 @@ pkgconf.generate(ffi_lib,
   filebase : 'libffi')
 
 ffi_dep = declare_dependency(link_with : ffi_lib,
-  compile_args : ffi_static_build,
+  compile_args : static_build ? [ ffi_static_build ] : [],
   include_directories : ffiinc)

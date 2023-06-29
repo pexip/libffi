@@ -5,16 +5,16 @@ project('libffi', 'c', version : '3.2.9999',
 
 cc = meson.get_compiler('c')
 
+project_arguments = ['-DFFI_BUILDING']
+
 # For FFI_EXTERN symbol exporting
 ffi_static_build = ''
-if get_option('default_library') == 'static'
+static_build = get_option('default_library') == 'static'
+if static_build
   ffi_static_build = '-DFFI_STATIC_BUILD'
+  project_arguments += [ffi_static_build]
 endif
 
-project_arguments = [
-  '-DFFI_BUILDING',
-  ffi_static_build,
-]
 add_project_arguments(project_arguments, language : 'c')
 
 ffi_conf = configuration_data()
