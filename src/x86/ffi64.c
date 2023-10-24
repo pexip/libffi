@@ -40,7 +40,7 @@
 #define MAX_GPR_REGS 6
 #define MAX_SSE_REGS 8
 
-#if defined(__INTEL_COMPILER)
+#if defined(__INTEL_COMPILER) || defined(__INTEL_LLVM_COMPILER)
 #include "xmmintrin.h"
 #define UINT128 __m128
 #else

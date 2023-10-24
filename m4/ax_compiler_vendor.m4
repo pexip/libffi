@@ -49,7 +49,7 @@
 AC_DEFUN([AX_COMPILER_VENDOR],
 [AC_CACHE_CHECK([for _AC_LANG compiler vendor], ax_cv_[]_AC_LANG_ABBREV[]_compiler_vendor,
   [# note: don't check for gcc first since some other compilers define __GNUC__
-  vendors="intel:     __ICC,__ECC,__INTEL_COMPILER
+  vendors="intel:     __ICC,__ECC,__INTEL_COMPILER,__INTEL_LLVM_COMPILER
            ibm:       __xlc__,__xlC__,__IBMC__,__IBMCPP__
            pathscale: __PATHCC__,__PATHSCALE__
            clang:     __clang__
