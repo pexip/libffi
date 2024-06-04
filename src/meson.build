@@ -4,6 +4,7 @@ ffi_c_sources = [
   'raw_api.c',
   'java_raw_api.c',
   'closures.c',
+  'tramp.c',
 ]
 
 ffi_asm_sources = []
