@@ -253,6 +253,11 @@ elif host_cpu_family == 'riscv64'
   TARGET = 'RISCV'
   c_sources = ['ffi.c']
   asm_sources = ['sysv.S']
+elif host_cpu_family == 'wasm32'
+  arch_subdir = 'wasm32'
+  TARGET = 'wasm32'
+  c_sources = ['ffi.c']
+  asm_sources = []
 endif
 
 if TARGET == ''
