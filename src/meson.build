@@ -120,11 +120,6 @@ ffi_lib = library('ffi', ffi_c_sources, ffi_asm_sources,
   darwin_versions : '9',
   install : true)
 
-pkgconf = import('pkgconfig')
-pkgconf.generate(ffi_lib,
-  description : 'Library supporting Foreign Function Interfaces',
-  filebase : 'libffi')
-
 ffi_dep = declare_dependency(link_with : ffi_lib,
   compile_args : static_build ? [ ffi_static_build ] : [],
   include_directories : ffiinc)
